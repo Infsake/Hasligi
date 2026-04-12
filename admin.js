@@ -180,10 +180,10 @@ document.getElementById('edit-player-form').onsubmit = async (e) => {
     };
     
     try {
-        const response = await fetch('/api/update-player', {
+        const response = await fetch(`/api/teams/${teamId}/players/${playerIndex}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ teamId, playerIndex, player: updatedPlayer })
+            body: JSON.stringify(updatedPlayer)
         });
         if (response.ok) {
             alert('Oyuncu başarıyla güncellendi!');
@@ -292,10 +292,10 @@ document.getElementById('player-form').onsubmit = async (e) => {
         position: formData.get('position')
     };
     try {
-        const response = await fetch('/api/add-player', {
+        const response = await fetch(`/api/teams/${teamId}/players`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ teamId, player: playerData })
+            body: JSON.stringify({ player: playerData })
         });
         if (response.ok) {
             alert('Oyuncu başarıyla eklendi!');
