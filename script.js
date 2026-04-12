@@ -32,8 +32,8 @@ async function fetchJson(url, fallbackUrl) {
 
 async function loadTeams() {
     const [teams, matches] = await Promise.all([
-        fetchJson('/api/teams', './teams.json'),
-        fetchJson('/api/matches', './matches.json')
+        fetchJson('/api/teams', '/teams.json'),
+        fetchJson('/api/matches', '/matches.json')
     ]);
     const teamList = document.getElementById('team-list');
     teamList.innerHTML = '';

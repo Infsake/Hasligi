@@ -33,7 +33,7 @@ function selectTab(tabId) {
 }
 
 async function loadTeamOptions() {
-    const teams = await fetchJson('/api/teams', './teams.json');
+    const teams = await fetchJson('/api/teams', '/teams.json');
     const team1 = document.getElementById('team1');
     const team2 = document.getElementById('team2');
     const playerTeam = document.getElementById('player-team');
@@ -66,7 +66,7 @@ async function loadTeamOptions() {
 }
 
 async function loadMatchOptions() {
-    const matches = await fetchJson('/api/matches', './matches.json');
+    const matches = await fetchJson('/api/matches', '/matches.json');
     const matchSelect = document.getElementById('match-select');
     matchSelect.innerHTML = '<option value="" disabled selected>Maç seç</option>';
     matches.filter(match => match.status !== 'past').forEach(match => {
@@ -138,7 +138,7 @@ document.getElementById('edit-player-team').addEventListener('change', async (e)
     
     if (!teamId) return;
     
-    const teams = await fetchJson('/api/teams', './teams.json');
+    const teams = await fetchJson('/api/teams', '/teams.json');
     const team = teams.find(t => t.id === teamId);
     
     if (team && team.players.length > 0) {
@@ -214,7 +214,7 @@ function updateGoalDetails() {
         const awayTeam = selectedOption.dataset.away;
 
         // Get players for both teams
-        fetchJson('/api/teams', './teams.json').then(teams => {
+        fetchJson('/api/teams', '/teams.json').then(teams => {
             const homePlayers = teams.find(t => t.name === homeTeam)?.players || [];
             const awayPlayers = teams.find(t => t.name === awayTeam)?.players || [];
 
@@ -344,7 +344,7 @@ document.getElementById('result-form').onsubmit = async (e) => {
     const link = formData.get('link') || null;
 
     // Get match details to know which team is home/away
-    const matches = await fetchJson('/api/matches', './matches.json');
+    const matches = await fetchJson('/api/matches', '/matches.json');
     const match = matches.find(m => m.id === matchId);
     const homeTeam = match.home;
     const awayTeam = match.away;

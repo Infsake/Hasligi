@@ -5,27 +5,32 @@ const { seedMatchesIfEmpty, readJsonFile } = require('../utils');
 
 module.exports = async (req, res) => {
   try {
-    if (!hasMongoURI) {
-      if (req.method === 'GET') {
-        const matches = await readJsonFile('matches.json');
-        return res.status(200).json(matches);
+    if (req.method === 'GET') {
+      if (hasMongoURI) {
+        try {
+          await connectDB();
+          await seedMatchesIfEmpty();
+          const matches = await Match.find().lean();
+          return res.status(200).json(matches);
+        } catch (err) {
+          console.error('Matches DB failed, falling back to matches.json', err);
+        }
       }
-      return res.status(500).send('MONGO_URI environment variable is not set on Vercel');
+      const matches = await readJsonFile('matches.json');
+      return res.status(200).json(matches);
     }
 
-    await connectDB();
-    await seedMatchesIfEmpty();
-
-    if (req.method === 'GET') {
-      const matches = await Match.find().lean();
-      return res.status(200).json(matches);
+    if (!hasMongoURI) {
+      return res.status(500).send('MONGO_URI environment variable is not set on Vercel');
     }
 
     if (req.method === 'POST') {
       const { home, away, date, time, place, link } = req.body;
       if (!home || !away || !date) {
-        return res.status(400).json({ error: 'home, away ve date alanlar� gerekli' });
+        return res.status(400).json({ error: 'home, away ve date alanları gerekli' });
       }
+      await connectDB();
+      await seedMatchesIfEmpty();
       const count = await Match.countDocuments();
       const id = `match${count + 1}`;
       const newMatch = new Match({

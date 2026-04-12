@@ -5,20 +5,23 @@ const { seedTeamsIfEmpty, readJsonFile } = require('../utils');
 
 module.exports = async (req, res) => {
   try {
-    if (!hasMongoURI) {
-      if (req.method === 'GET') {
-        const teams = await readJsonFile('teams.json');
-        return res.status(200).json(teams);
+    if (req.method === 'GET') {
+      if (hasMongoURI) {
+        try {
+          await connectDB();
+          await seedTeamsIfEmpty();
+          const teams = await Team.find().sort({ ranking: 1 }).lean();
+          return res.status(200).json(teams);
+        } catch (err) {
+          console.error('Teams DB failed, falling back to teams.json', err);
+        }
       }
-      return res.status(500).send('MONGO_URI environment variable is not set on Vercel');
+      const teams = await readJsonFile('teams.json');
+      return res.status(200).json(teams);
     }
 
-    await connectDB();
-    await seedTeamsIfEmpty();
-
-    if (req.method === 'GET') {
-      const teams = await Team.find().sort({ ranking: 1 }).lean();
-      return res.status(200).json(teams);
+    if (!hasMongoURI) {
+      return res.status(500).send('MONGO_URI environment variable is not set on Vercel');
     }
 
     if (req.method === 'POST') {
@@ -26,6 +29,8 @@ module.exports = async (req, res) => {
       if (!name) {
         return res.status(400).json({ error: 'Takım adı gerekli' });
       }
+      await connectDB();
+      await seedTeamsIfEmpty();
       const id = name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
       const count = await Team.countDocuments();
       const newTeam = new Team({

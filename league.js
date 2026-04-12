@@ -13,8 +13,8 @@ async function fetchJson(url, fallbackUrl) {
 
 async function loadStandings() {
     const [teams, matches] = await Promise.all([
-        fetchJson('/api/teams', './teams.json'),
-        fetchJson('/api/matches', './matches.json')
+        fetchJson('/api/teams', '/teams.json'),
+        fetchJson('/api/matches', '/matches.json')
     ]);
 
     const standings = teams.map(team => {
@@ -149,8 +149,8 @@ function createMatchCard(match, teams) {
 
 async function loadMatches() {
     const [matches, teams] = await Promise.all([
-        fetchJson('/api/matches', './matches.json'),
-        fetchJson('/api/teams', './teams.json')
+        fetchJson('/api/matches', '/matches.json'),
+        fetchJson('/api/teams', '/teams.json')
     ]);
     const pastDiv = document.getElementById('past-matches');
     const futureDiv = document.getElementById('future-matches');
@@ -162,7 +162,7 @@ async function loadMatches() {
 }
 
 function showMatchDetails(matchId) {
-    fetchJson('/api/matches', './matches.json').then(matches => {
+    fetchJson('/api/matches', '/matches.json').then(matches => {
         const match = matches.find(m => m.id === matchId);
         if (!match || !match.goals) return;
         let details = `Maç: ${match.home} vs ${match.away}\nSkor: ${match.score}\n\nGol Detayları:\n`;

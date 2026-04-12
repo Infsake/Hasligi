@@ -16,8 +16,8 @@ async function fetchJson(url, fallbackUrl) {
 async function loadPlayers() {
     try {
         const [teams, matches] = await Promise.all([
-            fetchJson('/api/teams', './teams.json'),
-            fetchJson('/api/matches', './matches.json')
+            fetchJson('/api/teams', '/teams.json'),
+            fetchJson('/api/matches', '/matches.json')
         ]);
 
     const playerStats = {};
