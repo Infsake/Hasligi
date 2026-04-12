@@ -43,7 +43,7 @@ module.exports = async (req, res) => {
       return res.status(404).send('Takım bulunamadı');
     }
 
-    let { player } = req.body;
+    let { player } = req.body || {};
     if (typeof player === 'string') {
         player = JSON.parse(player);
     }

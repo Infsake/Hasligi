@@ -60,7 +60,7 @@ module.exports = async (req, res) => {
       return res.status(404).send('Oyuncu bulunamadı');
     }
 
-    let updatedPlayer = req.body.player || req.body;
+    let updatedPlayer = (req.body && req.body.player) || req.body;
     if (typeof updatedPlayer === 'string') {
         updatedPlayer = JSON.parse(updatedPlayer);
     }
