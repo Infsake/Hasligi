@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HASLEAGUE | Admin</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="page-shell">
+        <nav class="site-nav pixel640">
+            <div class="brand"><img src="img/logolar/hasleague.png" alt="" style="width: 7rem;"></div>
+            <button class="hamburger" aria-label="Menü">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links">
+                <a href="./index.html" >Anasayfa</a>
+                <a href="./league.html">HAS Ligi</a>
+                <a href="./players.html">Oyuncular</a>
+                <a href="./admin.html" class="active">Admin Paneli</a>
+            </div>
+        </nav>
+
+        <main>
+            <section class="page-header">
+                <div>
+                    <span class="eyebrow">Admin Panel</span>
+                    <h1>HAS Ligi Yönetim Paneli</h1>
+                    <p>Bu sayfada yeni takım ekleyebilir, maç takvimi ayarlayabilir ve maç sonuçlarını kaydedebilirsiniz.</p>
+                </div>
+            </section>
+
+            <section class="admin-grid">
+                <div id="admin-login" class="admin-card">
+                    <h2>Admin Giriş</h2>
+                    <form id="login-form" class="admin-form">
+                        <label for="admin-password">Şifre</label>
+                        <input type="password" id="admin-password" placeholder="Şifreyi girin" required>
+                        <button type="submit">Giriş Yap</button>
+                    </form>
+                    <p class="admin-note">Admin şifresi doğruysa, üç ayrı yönetim seçeneği görünecektir.</p>
+                </div>
+            </section>
+
+            <section id="admin-controls" class="admin-grid hidden">
+                <div class="admin-card admin-tabs">
+                    <button class="tab-button active" data-tab="team-tab">Yeni Takım Ekle</button>
+                    <button class="tab-button" data-tab="player-tab">Takıma Oyuncu Ekle</button>
+                    <button class="tab-button" data-tab="edit-player-tab">Takımdaki Oyuncuyu Ayarla</button>
+                    <button class="tab-button" data-tab="schedule-tab">Maç Takvimi Ayarla</button>
+                    <button class="tab-button" data-tab="result-tab">Maç Sonucu Gir</button>
+                </div>
+
+                <div id="team-tab" class="admin-tab-content admin-card active">
+                    <h2>Yeni Takım Ekle</h2>
+                    <form id="team-form" class="admin-form">
+                        <label for="team-name">Takım İsmi</label>
+                        <input type="text" id="team-name" name="name" required>
+                        <label for="team-logo">Logo URL</label>
+                        <input type="text" id="team-logo" name="logo" placeholder="logos/team1.png" required>
+                        <label for="team-founded">Kuruluş Yılı</label>
+                        <input type="text" id="team-founded" name="founded" placeholder="2023" required>
+                        <label for="team-players">Oyuncular (virgülle ayır)</label>
+                        <input type="text" id="team-players" name="players" placeholder="Oyuncu A, Oyuncu B" required>
+                        <button type="submit">Takım Ekle</button>
+                    </form>
+                </div>
+
+                <div id="player-tab" class="admin-tab-content admin-card hidden">
+                    <h2>Takıma Oyuncu Ekle</h2>
+                    <form id="player-form" class="admin-form" enctype="multipart/form-data">
+                        <label for="player-team">Takım Seç</label>
+                        <select id="player-team" name="team" required></select>
+                        <label for="player-name">Oyuncu Adı</label>
+                        <input type="text" id="player-name" name="player" placeholder="Oyuncu adı" required>
+                        <label for="player-number">Oyuncu Numarası</label>
+                        <input type="number" id="player-number" name="number" min="1" max="99" placeholder="10" required>
+                        <label for="player-position">Mevki</label>
+                        <select id="player-position" name="position" required>
+                            <option value="">Mevki seç</option>
+                            <option value="Kaleci">Kaleci</option>
+                            <option value="Stoper">Stoper</option>
+                            <option value="Sol Bek">Sol Bek</option>
+                            <option value="Sağ Bek">Sağ Bek</option>
+                            <option value="Orta Saha">Orta Saha</option>
+                            <option value="Sol Kanat">Sol Kanat</option>
+                            <option value="Sağ Kanat">Sağ Kanat</option>
+                            <option value="Santrafor">Santrafor</option>
+                        </select>
+                        <label for="player-photo">Oyuncu Fotoğrafı</label>
+                        <input type="file" id="player-photo" name="photo" accept="image/*">
+                        <button type="submit">Oyuncu Ekle</button>
+                    </form>
+                </div>
+
+                <div id="edit-player-tab" class="admin-tab-content admin-card hidden">
+                    <h2>Takımdaki Oyuncuyu Ayarla</h2>
+                    <form id="edit-player-form" class="admin-form" enctype="multipart/form-data">
+                        <label for="edit-player-team">Takım Seç</label>
+                        <select id="edit-player-team" name="team" required>
+                            <option value="" disabled selected>Takım seç</option>
+                        </select>
+                        <label for="edit-player-select">Oyuncu Seç</label>
+                        <select id="edit-player-select" name="player" required>
+                            <option value="" disabled selected>Oyuncu seç</option>
+                        </select>
+                        <label for="edit-player-number">Oyuncu Numarası</label>
+                        <input type="number" id="edit-player-number" name="number" min="1" max="99" placeholder="10" required>
+                        <label for="edit-player-position">Mevki</label>
+                        <select id="edit-player-position" name="position" required>
+                            <option value="">Mevki seç</option>
+                            <option value="Kaleci">Kaleci</option>
+                            <option value="Stoper">Stoper</option>
+                            <option value="Sol Bek">Sol Bek</option>
+                            <option value="Sağ Bek">Sağ Bek</option>
+                            <option value="Orta Saha">Orta Saha</option>
+                            <option value="Sol Kanat">Sol Kanat</option>
+                            <option value="Sağ Kanat">Sağ Kanat</option>
+                            <option value="Santrafor">Santrafor</option>
+                        </select>
+                        <label for="edit-player-photo">Oyuncu Fotoğrafı</label>
+                        <input type="file" id="edit-player-photo" name="photo" accept="image/*">
+                        <button type="submit">Oyuncuyu Güncelle</button>
+                    </form>
+                </div>
+
+                <div id="schedule-tab" class="admin-tab-content admin-card hidden">
+                    <h2>Maç Takvimi Ayarla</h2>
+                    <form id="match-form" class="admin-form">
+                        <label for="team1">Birinci Takım</label>
+                        <select id="team1" name="home" required></select>
+                        <label for="team2">İkinci Takım</label>
+                        <select id="team2" name="away" required></select>
+                        <label for="match-date">Tarih</label>
+                        <input type="date" id="match-date" name="date" required>
+                        <label for="match-time">Saat</label>
+                        <input type="time" id="match-time" name="time" required>
+                        <label for="match-place">Yer</label>
+                        <input type="text" id="match-place" name="place" placeholder="Stadyum / Saha" required>
+                        <button type="submit">Maçı Kaydet</button>
+                    </form>
+                </div>
+
+                <div id="result-tab" class="admin-tab-content admin-card hidden">
+                    <h2>Maç Sonucu Gir</h2>
+                    <form id="result-form" class="admin-form">
+                        <label for="match-select">Maç Seç</label>
+                        <select id="match-select" name="match" required></select>
+                        <label id="score1-label" for="score1">Takım 1 Skoru</label>
+                        <input type="number" id="score1" name="score1" min="0" required>
+                        <label id="score2-label" for="score2">Takım 2 Skoru</label>
+                        <input type="number" id="score2" name="score2" min="0" required>
+                        <label for="result-link">Maç İzleme Linki (URL)</label>
+                        <input type="url" id="result-link" name="link" placeholder="https://">
+                        <div id="goal-details" class="goal-details hidden">
+                            <h3>Gol Detayları</h3>
+                            <div id="goals-container"></div>
+                        </div>
+                        <button type="submit">Sonucu Kaydet</button>
+                    </form>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="./admin.js"></script>
+    <script>
+        // Hamburger menü toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburger = document.querySelector('.hamburger');
+            const navLinks = document.querySelector('.nav-links');
+
+            if (hamburger && navLinks) {
+                hamburger.addEventListener('click', function() {
+                    navLinks.classList.toggle('open');
+                });
+
+                // Menü dışına tıklandığında kapat
+                document.addEventListener('click', function(event) {
+                    if (!hamburger.contains(event.target) && !navLinks.contains(event.target)) {
+                        navLinks.classList.remove('open');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

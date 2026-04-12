@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HASLEAGUE | Oyuncu</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="page-shell">
+        <nav class="site-nav pixel640">
+            <div class="brand"><img src="img/logolar/hasleague.png" alt="" style="width: 7rem;"></div>
+            <button class="hamburger" aria-label="Menü">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links">
+                <a href="./index.html">Anasayfa</a>
+                <a href="./league.html">HAS Ligi</a>
+                <a href="./players.html">Oyuncular</a>
+                <a href="./admin.html">Admin Paneli</a>
+            </div>
+        </nav>
+
+        <main>
+            <section class="player-hero">
+                <div class="player-card">
+                    <img id="player-photo" src="" alt="Oyuncu Fotoğrafı">
+                    <div class="player-info">
+                        <h1 id="player-name"></h1>
+                        <p><strong>Forma Numarası:</strong> <span id="player-number"></span></p>
+                        <p><strong>Mevki:</strong> <span id="player-position"></span></p>
+                        <p><strong>Takım:</strong> <span id="player-team"></span></p>
+                        <p><strong>Toplam Gol:</strong> <span id="total-goals"></span></p>
+                        <p><strong>Toplam Asist:</strong> <span id="total-assists"></span></p>
+                        <p><strong>Gol Krallığı Sıralaması:</strong> <span id="goals-ranking"></span></p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="player-matches">
+                <h2>Gol ve Asist Yaptığı Maçlar</h2>
+                <div id="player-matches-list" class="match-list"></div>
+            </section>
+        </main>
+    </div>
+    <script src="./player.js"></script>
+    <script>
+        // Hamburger menü toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburger = document.querySelector('.hamburger');
+            const navLinks = document.querySelector('.nav-links');
+
+            if (hamburger && navLinks) {
+                hamburger.addEventListener('click', function() {
+                    navLinks.classList.toggle('open');
+                });
+
+                // Menü dışına tıklandığında kapat
+                document.addEventListener('click', function(event) {
+                    if (!hamburger.contains(event.target) && !navLinks.contains(event.target)) {
+                        navLinks.classList.remove('open');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

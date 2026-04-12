@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HASLEAGUE | Team</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <div class="page-shell">
+        <nav class="site-nav">
+            <div class="brand"><img src="img/logolar/hasleague.png" alt="" style="width: 7rem;"></div>
+            <button class="hamburger" aria-label="Menü">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links">
+                <a href="./index.html">Anasayfa</a>
+                <a href="./league.html">HAS Ligi</a>
+                <a href="./players.html">Oyuncular</a>
+                <a href="./admin.html">Admin Paneli</a>
+            </div>
+        </nav>
+
+        <main>
+            <section class="team-hero">
+                <div class="team-header-card">
+                    <img id="team-logo" src="" alt="Takım Logosu">
+                    <div class="team-header-copy">
+                        <span class="eyebrow">Takım Profili</span>
+                        <h1 id="team-name"></h1>
+                        <p>
+                            <strong>Sosyal Medya:</strong> 
+                            <span>
+                                <a href="" id="sosyal" style="text-decoration: none; color: purple;">
+                                    <i class="fa-brands fa-instagram"></i>
+                                    <span>Instagram</span>
+                                </a>
+                            </span>
+                        </p>
+                        <p><strong>Kuruluş Yılı:</strong> <span id="founded"></span></p>
+                        <p><strong>Ligdeki Sıralaması:</strong> <span id="ranking"></span></p>
+                        <p><strong>Misyonu:</strong> <span id="misyon"></span></p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="team-details-grid">
+                <div class="team-panel">
+                    <h2>Oyuncu İstatistikleri</h2>
+                    <div id="player-stats" class="player-stats-list"></div>
+                </div>
+                <div class="team-panel">
+                    <h2>Ayarlanan Maçlar</h2>
+                    <div id="team-matches" class="match-list"></div>
+                </div>
+                <div class="team-panel">
+                    <h2>Oyuncu Kadrosu</h2>
+                    <ul id="players" class="player-list"></ul>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="./team.js"></script>
+    <script>
+        // Hamburger menü toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburger = document.querySelector('.hamburger');
+            const navLinks = document.querySelector('.nav-links');
+
+            if (hamburger && navLinks) {
+                hamburger.addEventListener('click', function() {
+                    navLinks.classList.toggle('open');
+                });
+
+                // Menü dışına tıklandığında kapat
+                document.addEventListener('click', function(event) {
+                    if (!hamburger.contains(event.target) && !navLinks.contains(event.target)) {
+                        navLinks.classList.remove('open');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

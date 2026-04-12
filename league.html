@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HASLEAGUE | League</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="page-shell">
+        <nav class="site-nav pixel640">
+            <div class="brand"><img src="img/logolar/hasleague.png" alt="" style="width: 7rem;"></div>
+            <button class="hamburger" aria-label="Menü">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links">
+                <a href="./index.html">Anasayfa</a>
+                <a href="./league.html" class="active">HAS Ligi</a>
+                <a href="./players.html">Oyuncular</a>
+                <a href="./admin.html">Admin Paneli</a>
+            </div>
+        </nav>
+
+        <main>
+            <section class="page-header">
+                <div>
+                    <span class="eyebrow">Kadir Has Anadolu Lisesi</span>
+                    <h1>HAS Ligi</h1>
+                    <p>Turnuvanın tüm takımlarının son puan durumu, gol farkı ve oynanan maçları burada takip edin.</p>
+                </div>
+            </section>
+
+            <section class="league-card">
+                <div class="league-card-header">
+                    <h2>Puan Durumu</h2>
+                </div>
+                <div class="table-wrapper">
+                    <table class="league-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Takım</th>
+                                <th>O</th>
+                                <th>G</th>
+                                <th>B</th>
+                                <th>M</th>
+                                <th>AG</th>
+                                <th>YG</th>
+                                <th>Av</th>
+                                <th>P</th>
+                            </tr>
+                        </thead>
+                        <tbody id="standings-body"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="match-section">
+                <div class="section-heading">
+                    <h2>Maçlar</h2>
+                    <p>Geçmiş ve gelecek maçları ayrı panellerde yan yana takip et.</p>
+                </div>
+                <div class="match-columns">
+                    <div class="match-block">
+                        <h3>Geçmiş Maçlar</h3>
+                        <div id="past-matches" class="match-list"></div>
+                    </div>
+                    <div class="match-block">
+                        <h3>Gelecek Maçlar</h3>
+                        <div id="future-matches" class="match-list"></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="./league.js"></script>
+    <script>
+        // Hamburger menü toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburger = document.querySelector('.hamburger');
+            const navLinks = document.querySelector('.nav-links');
+
+            if (hamburger && navLinks) {
+                hamburger.addEventListener('click', function() {
+                    navLinks.classList.toggle('open');
+                });
+
+                // Menü dışına tıklandığında kapat
+                document.addEventListener('click', function(event) {
+                    if (!hamburger.contains(event.target) && !navLinks.contains(event.target)) {
+                        navLinks.classList.remove('open');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

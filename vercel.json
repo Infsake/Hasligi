@@ -1,0 +1,12 @@
+{
+  "buildCommand": "",
+  "outputDirectory": ".",
+  "devCommand": "",
+  "public": false,
+  "rewrites": [
+    { "source": "/player", "destination": "/player.html" },
+    { "source": "/players", "destination": "/players.html" },
+    { "source": "/league", "destination": "/league.html" },
+    { "source": "/team/:id", "destination": "/team.html" }
+  ]
+}
