@@ -1,10 +1,6 @@
 const mongoose = require('mongoose');
 
-const MONGODB_URI = process.env.MONGO_URI || process.env.MONGODB_URI;
-
-if (!MONGODB_URI) {
-  throw new Error('MONGO_URI environment variable is not set');
-}
+const MONGODB_URI = process.env.MONGO_URI || process.env.MONGODB_URI || null;
 
 let cached = global._mongoose;
 if (!cached) {
@@ -12,6 +8,10 @@ if (!cached) {
 }
 
 async function connectDB() {
+  if (!MONGODB_URI) {
+    throw new Error('MONGO_URI environment variable is not set');
+  }
+
   if (cached.conn) {
     return cached.conn;
   }
@@ -29,4 +29,7 @@ async function connectDB() {
   return cached.conn;
 }
 
-module.exports = connectDB;
+module.exports = {
+  connectDB,
+  hasMongoURI: Boolean(MONGODB_URI)
+};

@@ -1,9 +1,18 @@
-const connectDB = require('../db');
+const db = require('../db');
+const { connectDB, hasMongoURI } = db;
 const { Match } = require('../models');
-const { seedMatchesIfEmpty } = require('../utils');
+const { seedMatchesIfEmpty, readJsonFile } = require('../utils');
 
 module.exports = async (req, res) => {
   try {
+    if (!hasMongoURI) {
+      if (req.method === 'GET') {
+        const matches = await readJsonFile('matches.json');
+        return res.status(200).json(matches);
+      }
+      return res.status(500).send('MONGO_URI environment variable is not set on Vercel');
+    }
+
     await connectDB();
     await seedMatchesIfEmpty();
 

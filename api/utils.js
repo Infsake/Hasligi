@@ -25,6 +25,7 @@ async function seedMatchesIfEmpty() {
 }
 
 module.exports = {
+  readJsonFile,
   seedTeamsIfEmpty,
   seedMatchesIfEmpty
 };
