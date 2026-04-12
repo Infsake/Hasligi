@@ -127,6 +127,9 @@ document.querySelectorAll('.tab-button').forEach(button => {
 
 document.getElementById('match-select').addEventListener('change', updateResultLabels);
 
+document.getElementById('score1').addEventListener('input', updateGoalDetails);
+document.getElementById('score2').addEventListener('input', updateGoalDetails);
+
 // Edit player functionality
 document.getElementById('edit-player-team').addEventListener('change', async (e) => {
     const teamId = e.target.value;
