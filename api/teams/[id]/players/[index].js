@@ -1,9 +1,11 @@
 const connectDB = require('../../../db');
 const { Team } = require('../../../models');
+const { seedTeamsIfEmpty } = require('../../../utils');
 
 module.exports = async (req, res) => {
   try {
     await connectDB();
+    await seedTeamsIfEmpty();
 
     if (req.method !== 'PUT') {
       res.setHeader('Allow', 'PUT');

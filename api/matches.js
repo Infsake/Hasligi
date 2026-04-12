@@ -1,9 +1,11 @@
 const connectDB = require('./db');
 const { Match } = require('./models');
+const { seedMatchesIfEmpty } = require('./utils');
 
 module.exports = async (req, res) => {
   try {
     await connectDB();
+    await seedMatchesIfEmpty();
 
     if (req.method === 'GET') {
       const matches = await Match.find().lean();
@@ -13,7 +15,7 @@ module.exports = async (req, res) => {
     if (req.method === 'POST') {
       const { home, away, date, time, place, link } = req.body;
       if (!home || !away || !date) {
-        return res.status(400).json({ error: 'home, away ve date alanlarý gerekli' });
+        return res.status(400).json({ error: 'home, away ve date alanlarï¿½ gerekli' });
       }
       const count = await Match.countDocuments();
       const id = `match${count + 1}`;
