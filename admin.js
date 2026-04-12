@@ -1,4 +1,4 @@
-const ADMIN_PASSWORD = 'HASLEAGUE2026';
+const ADMIN_PASSWORD = '!HL!20_26&!a';
 
 async function fetchJson(url, fallbackUrl) {
     try {
