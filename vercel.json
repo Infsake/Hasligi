@@ -5,13 +5,13 @@
     { "src": "*.html", "use": "@vercel/static" }
   ],
   "routes": [
+    { "src": "^/api/(.*)$", "dest": "/api/$1" },
+    { "handle": "filesystem" },
     { "src": "^/$", "dest": "/index.html" },
     { "src": "^/admin$", "dest": "/admin.html" },
     { "src": "^/player$", "dest": "/player.html" },
     { "src": "^/players$", "dest": "/players.html" },
     { "src": "^/league$", "dest": "/league.html" },
-    { "src": "^/team/([^/]+)$", "dest": "/team.html" },
-    { "src": "^/api/(.*)$", "dest": "/api/$1" },
-    { "src": "^(.*)$", "dest": "/$1" }
+    { "src": "^/team/([^/]+)$", "dest": "/team.html" }
   ]
 }
