@@ -16,7 +16,21 @@ module.exports = async (req, res) => {
       return res.status(405).end('Method not allowed');
     }
 
-    const { id } = req.query;
+    // Get id from query or URL path
+    let id = req.query.id;
+    
+    // If not in query, try to parse from URL path
+    if (!id && req.url) {
+      const urlMatch = req.url.match(/\/api\/matches\/([^/?]+)/);
+      if (urlMatch) {
+        id = urlMatch[1];
+      }
+    }
+
+    if (!id) {
+      return res.status(400).send('Maç ID\'si bulunamadı');
+    }
+
     const { score, link, goals } = req.body;
     const match = await Match.findOne({ id });
     if (!match) {
