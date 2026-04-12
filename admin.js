@@ -163,38 +163,49 @@ document.getElementById('edit-player-select').addEventListener('change', (e) => 
 
 document.getElementById('edit-player-form').onsubmit = async (e) => {
     e.preventDefault();
-    const formData = new FormData(e.target);
-    const teamId = formData.get('team');
-    const playerIndex = formData.get('player');
+    const form = e.target;
+    const teamId = form.team.value;
+    const playerIndex = form.player.value;
     const playerSelect = document.getElementById('edit-player-select');
     const selectedOption = playerSelect.options[playerSelect.selectedIndex];
     const playerData = JSON.parse(selectedOption.dataset.playerData || '{}');
     
     const updatedPlayer = {
         name: playerData.name,
-        number: parseInt(formData.get('number')),
-        position: formData.get('position')
+        number: parseInt(form.number.value),
+        position: form.position.value
     };
     
-    // Add player data to formData
-    formData.set('player', JSON.stringify(updatedPlayer));
-    formData.set('playerIndex', playerIndex);
-    formData.set('teamId', teamId);
+    // Add photo if exists
+    const photoFile = form['edit-player-photo'].files[0];
+    if (photoFile) {
+        const reader = new FileReader();
+        reader.onload = async (event) => {
+            updatedPlayer.photoBase64 = event.target.result;
+            await sendUpdateRequest();
+        };
+        reader.readAsDataURL(photoFile);
+    } else {
+        await sendUpdateRequest();
+    }
     
-    try {
-        const response = await fetch(`/api/teams/${teamId}/players/${playerIndex}`, {
-            method: 'PUT',
-            body: formData
-        });
-        if (response.ok) {
-            alert('Oyuncu başarıyla güncellendi!');
-            e.target.reset();
-            document.getElementById('edit-player-select').innerHTML = '<option value="" disabled selected>Oyuncu seç</option>';
-        } else {
-            alert('Hata: ' + await response.text());
+    async function sendUpdateRequest() {
+        try {
+            const response = await fetch(`/api/teams/${teamId}/players/${playerIndex}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ player: updatedPlayer })
+            });
+            if (response.ok) {
+                alert('Oyuncu başarıyla güncellendi!');
+                form.reset();
+                document.getElementById('edit-player-select').innerHTML = '<option value="" disabled selected>Oyuncu seç</option>';
+            } else {
+                alert('Hata: ' + await response.text());
+            }
+        } catch (error) {
+            alert('Bağlantı hatası: ' + error.message);
         }
-    } catch (error) {
-        alert('Bağlantı hatası: ' + error.message);
     }
 };
 
@@ -285,31 +296,43 @@ document.getElementById('team-form').onsubmit = async (e) => {
 
 document.getElementById('player-form').onsubmit = async (e) => {
     e.preventDefault();
-    const formData = new FormData(e.target);
-    const teamId = formData.get('team');
+    const form = e.target;
+    const teamId = form.team.value;
     const playerData = {
-        name: formData.get('player'),
-        number: parseInt(formData.get('number')),
-        position: formData.get('position')
+        name: form.player.value,
+        number: parseInt(form.number.value),
+        position: form.position.value
     };
     
-    // Add player data to formData
-    formData.set('player', JSON.stringify(playerData));
-    formData.set('teamId', teamId);
+    // Add photo if exists
+    const photoFile = form['player-photo'].files[0];
+    if (photoFile) {
+        const reader = new FileReader();
+        reader.onload = async (event) => {
+            playerData.photoBase64 = event.target.result;
+            await sendCreateRequest();
+        };
+        reader.readAsDataURL(photoFile);
+    } else {
+        await sendCreateRequest();
+    }
     
-    try {
-        const response = await fetch(`/api/teams/${teamId}/players`, {
-            method: 'PUT',
-            body: formData
-        });
-        if (response.ok) {
-            alert('Oyuncu başarıyla eklendi!');
-            e.target.reset();
-        } else {
-            alert('Hata: ' + await response.text());
+    async function sendCreateRequest() {
+        try {
+            const response = await fetch(`/api/teams/${teamId}/players`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ player: playerData })
+            });
+            if (response.ok) {
+                alert('Oyuncu başarıyla eklendi!');
+                form.reset();
+            } else {
+                alert('Hata: ' + await response.text());
+            }
+        } catch (error) {
+            alert('Bağlantı hatası: ' + error.message);
         }
-    } catch (error) {
-        alert('Bağlantı hatası: ' + error.message);
     }
 };
 

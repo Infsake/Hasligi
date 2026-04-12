@@ -51,28 +51,36 @@ module.exports = async (req, res) => {
       return res.status(400).send('Oyuncu verisi gerekli');
     }
 
-    // Handle photo upload
-    if (req.files && req.files.photo) {
-      const photo = req.files.photo;
-      const uploadDir = path.join(process.cwd(), 'img/oyuncular/takımlar', team.name);
-      
-      // Ensure directory exists
-      if (!fs.existsSync(uploadDir)) {
-        fs.mkdirSync(uploadDir, { recursive: true });
+    // Handle photo upload from base64
+    if (player.photoBase64) {
+      try {
+        const base64Data = player.photoBase64.split(',')[1]; // Remove data:image/jpeg;base64,
+        const buffer = Buffer.from(base64Data, 'base64');
+        
+        const uploadDir = path.join(process.cwd(), 'img/oyuncular/takımlar', team.name);
+        
+        // Ensure directory exists
+        if (!fs.existsSync(uploadDir)) {
+          fs.mkdirSync(uploadDir, { recursive: true });
+        }
+
+        // Generate filename
+        const filename = `${player.name.replace(/[^a-zA-Z0-9]/g, '_')}_${Date.now()}.jpg`;
+        const filepath = path.join(uploadDir, filename);
+
+        // Process and save image
+        await sharp(buffer)
+          .resize(300, 300, { fit: 'cover' })
+          .jpeg({ quality: 80 })
+          .toFile(filepath);
+
+        player.photo = `/img/oyuncular/takımlar/${team.name}/${filename}`;
+        delete player.photoBase64; // Remove base64 from player data
+      } catch (photoErr) {
+        console.error('Photo processing error:', photoErr);
+        // Continue without photo if processing fails
+        delete player.photoBase64;
       }
-
-      // Generate filename
-      const ext = path.extname(photo.name);
-      const filename = `${player.name.replace(/[^a-zA-Z0-9]/g, '_')}_${Date.now()}${ext}`;
-      const filepath = path.join(uploadDir, filename);
-
-      // Process and save image
-      await sharp(photo.data)
-        .resize(300, 300, { fit: 'cover' })
-        .jpeg({ quality: 80 })
-        .toFile(filepath);
-
-      player.photo = `/img/oyuncular/takımlar/${team.name}/${filename}`;
     }
 
     team.players = Array.isArray(team.players) ? team.players : [];
