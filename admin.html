@@ -71,7 +71,7 @@
 
                 <div id="player-tab" class="admin-tab-content admin-card hidden">
                     <h2>Takıma Oyuncu Ekle</h2>
-                    <form id="player-form" class="admin-form">
+                    <form id="player-form" class="admin-form" enctype="multipart/form-data">
                         <label for="player-team">Takım Seç</label>
                         <select id="player-team" name="team" required></select>
                         <label for="player-name">Oyuncu Adı</label>
@@ -98,7 +98,7 @@
 
                 <div id="edit-player-tab" class="admin-tab-content admin-card hidden">
                     <h2>Takımdaki Oyuncuyu Ayarla</h2>
-                    <form id="edit-player-form" class="admin-form">
+                    <form id="edit-player-form" class="admin-form" enctype="multipart/form-data">
                         <label for="edit-player-team">Takım Seç</label>
                         <select id="edit-player-team" name="team" required>
                             <option value="" disabled selected>Takım seç</option>

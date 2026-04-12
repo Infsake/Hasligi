@@ -127,49 +127,6 @@ document.querySelectorAll('.tab-button').forEach(button => {
 
 document.getElementById('match-select').addEventListener('change', updateResultLabels);
 
-// Global variables for photo base64
-let playerPhotoBase64 = null;
-let editPlayerPhotoBase64 = null;
-
-// Function to convert file to base64
-function fileToBase64(file) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = error => reject(error);
-    });
-}
-
-// Add event listeners for photo inputs
-document.getElementById('player-photo').addEventListener('change', async (e) => {
-    const file = e.target.files[0];
-    if (file) {
-        try {
-            playerPhotoBase64 = await fileToBase64(file);
-        } catch (error) {
-            console.error('Photo conversion error:', error);
-            playerPhotoBase64 = null;
-        }
-    } else {
-        playerPhotoBase64 = null;
-    }
-});
-
-document.getElementById('edit-player-photo').addEventListener('change', async (e) => {
-    const file = e.target.files[0];
-    if (file) {
-        try {
-            editPlayerPhotoBase64 = await fileToBase64(file);
-        } catch (error) {
-            console.error('Photo conversion error:', error);
-            editPlayerPhotoBase64 = null;
-        }
-    } else {
-        editPlayerPhotoBase64 = null;
-    }
-});
-
 // Edit player functionality
 document.getElementById('edit-player-team').addEventListener('change', async (e) => {
     const teamId = e.target.value;
@@ -219,22 +176,18 @@ document.getElementById('edit-player-form').onsubmit = async (e) => {
         position: formData.get('position')
     };
     
-    // Add photo if exists
-    if (editPlayerPhotoBase64) {
-        updatedPlayer.photoBase64 = editPlayerPhotoBase64;
-    }
+    // Add player data to formData
+    formData.set('player', JSON.stringify(updatedPlayer));
     
     try {
         const response = await fetch(`/api/teams/${teamId}/players/${playerIndex}`, {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ player: updatedPlayer })
+            body: formData
         });
         if (response.ok) {
             alert('Oyuncu başarıyla güncellendi!');
             e.target.reset();
             document.getElementById('edit-player-select').innerHTML = '<option value="" disabled selected>Oyuncu seç</option>';
-            editPlayerPhotoBase64 = null; // Reset
         } else {
             alert('Hata: ' + await response.text());
         }
@@ -338,21 +291,17 @@ document.getElementById('player-form').onsubmit = async (e) => {
         position: formData.get('position')
     };
     
-    // Add photo if exists
-    if (playerPhotoBase64) {
-        playerData.photoBase64 = playerPhotoBase64;
-    }
+    // Add player data to formData
+    formData.set('player', JSON.stringify(playerData));
     
     try {
         const response = await fetch(`/api/teams/${teamId}/players`, {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ player: playerData })
+            body: formData
         });
         if (response.ok) {
             alert('Oyuncu başarıyla eklendi!');
             e.target.reset();
-            playerPhotoBase64 = null; // Reset
         } else {
             alert('Hata: ' + await response.text());
         }
