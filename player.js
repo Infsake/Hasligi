@@ -2,13 +2,24 @@ const urlParams = new URLSearchParams(window.location.search);
 const teamId = urlParams.get('team');
 const playerIndex = parseInt(urlParams.get('index'));
 
+async function fetchJson(url, fallbackUrl) {
+    try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(response.status);
+        return await response.json();
+    } catch (err) {
+        if (!fallbackUrl) throw err;
+        const fallbackResponse = await fetch(fallbackUrl);
+        if (!fallbackResponse.ok) throw err;
+        return await fallbackResponse.json();
+    }
+}
+
 async function loadPlayerDetails() {
-    const [teamsRes, matchesRes] = await Promise.all([
-        fetch('/api/teams'),
-        fetch('/api/matches')
+    const [teams, matches] = await Promise.all([
+        fetchJson('/api/teams', './teams.json'),
+        fetchJson('/api/matches', './matches.json')
     ]);
-    const teams = await teamsRes.json();
-    const matches = await matchesRes.json();
 
     const team = teams.find(t => t.id === teamId);
     if (!team || !team.players || playerIndex < 0 || playerIndex >= team.players.length) {

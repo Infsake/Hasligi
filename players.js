@@ -1,15 +1,24 @@
 let currentSort = 'gol'; // default sort by gol
 
+async function fetchJson(url, fallbackUrl) {
+    try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(response.status);
+        return await response.json();
+    } catch (err) {
+        if (!fallbackUrl) throw err;
+        const fallbackResponse = await fetch(fallbackUrl);
+        if (!fallbackResponse.ok) throw err;
+        return await fallbackResponse.json();
+    }
+}
+
 async function loadPlayers() {
     try {
-        const [teamsRes, matchesRes] = await Promise.all([
-            fetch('/api/teams'),
-            fetch('/api/matches')
+        const [teams, matches] = await Promise.all([
+            fetchJson('/api/teams', './teams.json'),
+            fetchJson('/api/matches', './matches.json')
         ]);
-        if (!teamsRes.ok) throw new Error('Teams fetch failed: ' + teamsRes.status);
-        if (!matchesRes.ok) throw new Error('Matches fetch failed: ' + matchesRes.status);
-        const teams = await teamsRes.json();
-        const matches = await matchesRes.json();
 
     const playerStats = {};
 

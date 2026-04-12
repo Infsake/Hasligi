@@ -1,10 +1,21 @@
+async function fetchJson(url, fallbackUrl) {
+    try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(response.status);
+        return await response.json();
+    } catch (err) {
+        if (!fallbackUrl) throw err;
+        const fallbackResponse = await fetch(fallbackUrl);
+        if (!fallbackResponse.ok) throw err;
+        return await fallbackResponse.json();
+    }
+}
+
 async function loadStandings() {
-    const [teamsRes, matchesRes] = await Promise.all([
-        fetch('/api/teams'),
-        fetch('/api/matches')
+    const [teams, matches] = await Promise.all([
+        fetchJson('/api/teams', './teams.json'),
+        fetchJson('/api/matches', './matches.json')
     ]);
-    const teams = await teamsRes.json();
-    const matches = await matchesRes.json();
 
     const standings = teams.map(team => {
         let played = 0, won = 0, drawn = 0, lost = 0, gf = 0, ga = 0;
@@ -137,12 +148,10 @@ function createMatchCard(match, teams) {
 }
 
 async function loadMatches() {
-    const [matchesRes, teamsRes] = await Promise.all([
-        fetch('/api/matches'),
-        fetch('/api/teams')
+    const [matches, teams] = await Promise.all([
+        fetchJson('/api/matches', './matches.json'),
+        fetchJson('/api/teams', './teams.json')
     ]);
-    const matches = await matchesRes.json();
-    const teams = await teamsRes.json();
     const pastDiv = document.getElementById('past-matches');
     const futureDiv = document.getElementById('future-matches');
     const pastMatches = matches.filter(match => match.status === 'past');
@@ -153,7 +162,7 @@ async function loadMatches() {
 }
 
 function showMatchDetails(matchId) {
-    fetch('/api/matches').then(res => res.json()).then(matches => {
+    fetchJson('/api/matches', './matches.json').then(matches => {
         const match = matches.find(m => m.id === matchId);
         if (!match || !match.goals) return;
         let details = `Maç: ${match.home} vs ${match.away}\nSkor: ${match.score}\n\nGol Detayları:\n`;

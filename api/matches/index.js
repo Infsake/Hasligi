@@ -1,6 +1,6 @@
-const connectDB = require('./db');
-const { Match } = require('./models');
-const { seedMatchesIfEmpty } = require('./utils');
+const connectDB = require('../db');
+const { Match } = require('../models');
+const { seedMatchesIfEmpty } = require('../utils');
 
 module.exports = async (req, res) => {
   try {

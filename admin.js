@@ -1,5 +1,18 @@
 const ADMIN_PASSWORD = 'HASLEAGUE2026';
 
+async function fetchJson(url, fallbackUrl) {
+    try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(response.status);
+        return await response.json();
+    } catch (err) {
+        if (!fallbackUrl) throw err;
+        const fallbackResponse = await fetch(fallbackUrl);
+        if (!fallbackResponse.ok) throw err;
+        return await fallbackResponse.json();
+    }
+}
+
 function showAdminControls() {
     document.getElementById('admin-login').classList.add('hidden');
     document.getElementById('admin-controls').classList.remove('hidden');
@@ -20,8 +33,7 @@ function selectTab(tabId) {
 }
 
 async function loadTeamOptions() {
-    const response = await fetch('/api/teams');
-    const teams = await response.json();
+    const teams = await fetchJson('/api/teams', './teams.json');
     const team1 = document.getElementById('team1');
     const team2 = document.getElementById('team2');
     const playerTeam = document.getElementById('player-team');
@@ -54,8 +66,7 @@ async function loadTeamOptions() {
 }
 
 async function loadMatchOptions() {
-    const response = await fetch('/api/matches');
-    const matches = await response.json();
+    const matches = await fetchJson('/api/matches', './matches.json');
     const matchSelect = document.getElementById('match-select');
     matchSelect.innerHTML = '<option value="" disabled selected>Maç seç</option>';
     matches.filter(match => match.status !== 'past').forEach(match => {
@@ -127,8 +138,7 @@ document.getElementById('edit-player-team').addEventListener('change', async (e)
     
     if (!teamId) return;
     
-    const response = await fetch('/api/teams');
-    const teams = await response.json();
+    const teams = await fetchJson('/api/teams', './teams.json');
     const team = teams.find(t => t.id === teamId);
     
     if (team && team.players.length > 0) {
@@ -204,7 +214,7 @@ function updateGoalDetails() {
         const awayTeam = selectedOption.dataset.away;
 
         // Get players for both teams
-        fetch('/api/teams').then(res => res.json()).then(teams => {
+        fetchJson('/api/teams', './teams.json').then(teams => {
             const homePlayers = teams.find(t => t.name === homeTeam)?.players || [];
             const awayPlayers = teams.find(t => t.name === awayTeam)?.players || [];
 
@@ -334,7 +344,7 @@ document.getElementById('result-form').onsubmit = async (e) => {
     const link = formData.get('link') || null;
 
     // Get match details to know which team is home/away
-    const matches = await fetch('/api/matches').then(r => r.json());
+    const matches = await fetchJson('/api/matches', './matches.json');
     const match = matches.find(m => m.id === matchId);
     const homeTeam = match.home;
     const awayTeam = match.away;

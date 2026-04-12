@@ -17,14 +17,24 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-async function loadTeams() {
-    const [teamsRes, matchesRes] = await Promise.all([
-        fetch('/api/teams'),
-        fetch('/api/matches')
-    ]);
+async function fetchJson(url, fallbackUrl) {
+    try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(response.status);
+        return await response.json();
+    } catch (err) {
+        if (!fallbackUrl) throw err;
+        const fallbackResponse = await fetch(fallbackUrl);
+        if (!fallbackResponse.ok) throw err;
+        return await fallbackResponse.json();
+    }
+}
 
-    const teams = await teamsRes.json();
-    const matches = await matchesRes.json();
+async function loadTeams() {
+    const [teams, matches] = await Promise.all([
+        fetchJson('/api/teams', './teams.json'),
+        fetchJson('/api/matches', './matches.json')
+    ]);
     const teamList = document.getElementById('team-list');
     teamList.innerHTML = '';
 

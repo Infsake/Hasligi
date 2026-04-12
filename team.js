@@ -1,11 +1,22 @@
 const params = new URLSearchParams(window.location.search);
 const teamId = params.get('id');
 
+async function fetchJson(url, fallbackUrl) {
+    try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(response.status);
+        return await response.json();
+    } catch (err) {
+        if (!fallbackUrl) throw err;
+        const fallbackResponse = await fetch(fallbackUrl);
+        if (!fallbackResponse.ok) throw err;
+        return await fallbackResponse.json();
+    }
+}
+
 async function loadTeamDetails() {
     try {
-        const response = await fetch('/api/teams');
-        if (!response.ok) throw new Error('Teams fetch failed: ' + response.status);
-        const teams = await response.json();
+        const teams = await fetchJson('/api/teams', './teams.json');
         const team = teams.find(t => t.id === teamId);
         if (!team) {
             document.body.innerHTML = '<div class="page-shell"><h1>Takım bulunamadı</h1></div>';
@@ -19,8 +30,7 @@ async function loadTeamDetails() {
     document.getElementById('ranking').textContent = team.ranking;
     
     // Load matches to calculate player stats
-    const matchesRes = await fetch('/api/matches');
-    const matches = await matchesRes.json();
+    const matches = await fetchJson('/api/matches', './matches.json');
     
     // Calculate player statistics
     const playerStats = {};
