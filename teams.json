@@ -3,7 +3,7 @@
     "id": "has-munich",
     "sosyal": "https://www.instagram.com/hasmunich/",
     "name": "HAS MUNICH",
-    "logo": "../img/logolar/takimlar/has_munich.png",
+    "logo": "/img/logolar/takimlar/has_munich.png",
     "founded": "2026",
     "ranking": 1,
     "misyon": "Kadir Has Anadolu Lisesi 11/C sınıfının mirasını, Has Munich disipliniyle harmanladık. Leyleğin asaletini ve Munih futbol kültürünü her zaman taşıyacağız. Böylelikle Has Ligi'nin en büyük camiası kurulmuş oldu.",
@@ -12,55 +12,55 @@
         "name": "Eymen Ege Ay",
         "number": "9",
         "position": "Santrafor",
-        "photo": "img/oyuncular/takımlar/HAS MUNICH/9.jpg"
+        "photo": "/img/oyuncular/takımlar/HAS MUNICH/9.jpg"
       },
       {
         "name": "Ramazan Coşkun",
         "number": "10",
         "position": "Orta Saha",
-        "photo": "img/oyuncular/takımlar/HAS MUNICH/10.jpg"
+        "photo": "/img/oyuncular/takımlar/HAS MUNICH/10.jpg"
       },
       {
         "name": "Arda Yıldırım",
         "number": "5",
         "position": "Sağ Kanat",
-        "photo": "img/oyuncular/takımlar/HAS MUNICH/5.jpg"
+        "photo": "/img/oyuncular/takımlar/HAS MUNICH/5.jpg"
       },
       {
         "name": "Oğuzhan Kul",
         "number": "7",
         "position": "Sol Kanat",
-        "photo": "img/oyuncular/takımlar/HAS MUNICH/7.jpg"
+        "photo": "/img/oyuncular/takımlar/HAS MUNICH/7.jpg"
       },
       {
         "name": "Yiğit Can",
         "number": "58",
         "position": "Stoper",
-        "photo": "img/oyuncular/takımlar/HAS MUNICH/58.jpg"
+        "photo": "/img/oyuncular/takımlar/HAS MUNICH/58.jpg"
       },
       {
         "name": "Deniz Kurşun",
         "number": "11",
         "position": "Stoper",
-        "photo": "img/oyuncular/takımlar/HAS MUNICH/11.jpg"
+        "photo": "/img/oyuncular/takımlar/HAS MUNICH/11.jpg"
       },
       {
         "name": "Hasan Hüseyin Uzun",
         "number": "1",
         "position": "Kaleci",
-        "photo": "img/oyuncular/takımlar/HAS MUNICH/1.jpg"
+        "photo": "/img/oyuncular/takımlar/HAS MUNICH/1.jpg"
       },
       {
         "name": "Hasan Kompir",
         "number": "17",
         "position": "Santrafor",
-        "photo": "img/oyuncular/takımlar/HAS MUNICH/17.jpg"
+        "photo": "/img/oyuncular/takımlar/HAS MUNICH/17.jpg"
       },
       {
         "name": "Kaan Bilgili",
         "number": "69",
         "position": "Orta Saha",
-        "photo": "img/oyuncular/takımlar/HAS MUNICH/69.jpg"
+        "photo": "/img/oyuncular/takımlar/HAS MUNICH/69.jpg"
       }
     ],
     "matches": []
@@ -69,7 +69,7 @@
     "id": "has-milan",
     "sosyal": "https://www.instagram.com/hasmilan.fc/",
     "name": "HAS MILAN",
-    "logo": "../img/logolar/takimlar/has_milan.png",
+    "logo": "/img/logolar/takimlar/has_milan.png",
     "founded": "2026",
     "ranking": 3,
     "misyon": "Aynı sınıfta dirsek çürüten arkadaşlar olarak, kalemleri bırakıp kramponları giydiğimizde tek bir yürek olmak. Amacımız, rakip kim olursa olsun sınıfımızın adını en iyi şekilde temsil etmek, sahada birbirimizin açığını kapatmak ve her maçtan sonra galibiyetten daha önemli olan arkadaşlığımızı korumaktır. Okul turnuvalarının en çok korkulan ve en çok saygı duyulan sınıf takımı olmak. Teneffüslerde planladığımız taktikleri sahada gerçeğe dönüştürerek, mezun olsak bile unutulmayacak bir takım efsanesi bırakmak.",
@@ -121,7 +121,7 @@
     "id": "hascelona",
     "sosyal": "https://www.instagram.com/hascelona/",
     "name": "HASCELONA",
-    "logo": "../img/logolar/takimlar/hascelona.png",
+    "logo": "/img/logolar/takimlar/hascelona.png",
     "founded": "2026",
     "ranking": 4,
     "misyon": "Hascelona, futbolun disiplini ile tutkusunu birleştiren, sahada sadece galibiyeti değil, sarsılmaz bir başarı ekolünü ve takım ruhunu temsil eden bir oluşumdur. Misyonumuz, centilmenlikten ödün vermeden her maçta en yüksek performansla sporun birleştirici gücünü sahaya yansıtmak; ana hedefimiz ise yenilikçi vizyonumuzla bu ismi ulusal ve uluslararası arenada saygı duyulan, kalıcı bir futbol markası haline getirmektir.",
@@ -203,7 +203,7 @@
     "id": "haschester",
     "sosyal": "https://www.instagram.com/haschester/",
     "name": "HASCHESTER",
-    "logo": "../img/logolar/takimlar/haschester.png",
+    "logo": "/img/logolar/takimlar/haschester.png",
     "founded": "2026",
     "ranking": 5,
     "misyon": "Yaratıcılığımızı, kültürel zenginliğimizi ve teknik gücümüzü bir araya getirerek uluslararası standartlarda, özgün ve etkileyici klipler üretmek; global içeriklerle rekabet eden değil, onları aşan işler ortaya koymak. Sürekli gelişimi, yeniliği ve ekip ruhunu benimseyerek izleyicilere güçlü hikâyeler sunmak ve yerel üretimi dünya sahnesinde öne çıkarmak.",
@@ -212,55 +212,55 @@
         "name": "Ömer Bilal Sezen",
         "number": 17,
         "position": "Santrafor",
-        "photo": "img/oyuncular/takımlar/HASCHESTER/17.jpg"
+        "photo": "/img/oyuncular/takımlar/HASCHESTER/17.jpg"
       },
       {
         "name": "Eymen Beyan",
         "number": 11,
         "position": "Sağ Kanat",
-        "photo": "img/oyuncular/takımlar/HASCHESTER/11.jpg"
+        "photo": "/img/oyuncular/takımlar/HASCHESTER/11.jpg"
       },
       {
         "name": "Umut Yasin Altuntaş",
         "number": 5,
         "position": "Orta Saha",
-        "photo": "img/oyuncular/takımlar/HASCHESTER/5.jpg"
+        "photo": "/img/oyuncular/takımlar/HASCHESTER/5.jpg"
       },
       {
         "name": "Erdem Düzenli",
         "number": 3,
         "position": "Stoper",
-        "photo": "img/oyuncular/takımlar/HASCHESTER/3.jpg"
+        "photo": "/img/oyuncular/takımlar/HASCHESTER/3.jpg"
       },
       {
         "name": "Ege Berk Özer",
         "number": 4,
         "position": "Stoper",
-        "photo": "img/oyuncular/takımlar/HASCHESTER/4.jpg"
+        "photo": "/img/oyuncular/takımlar/HASCHESTER/4.jpg"
       },
       {
         "name": "Mustafa Kerem Karadeniz",
         "number": "1",
         "position": "Kaleci",
-        "photo": "img/oyuncular/takımlar/HASCHESTER/1.jpg"
+        "photo": "/img/oyuncular/takımlar/HASCHESTER/1.jpg"
       },
       {
         "name": "Doruk Çataltepe",
         "number": 13,
         "position": "Stoper",
-        "photo": "img/oyuncular/takımlar/HASCHESTER/13.jpg"
+        "photo": "/img/oyuncular/takımlar/HASCHESTER/13.jpg"
       },
       {
         "name": "Robin Özer",
         "number": 10,
         "position": "Sol Kanat",
-        "photo": "img/oyuncular/takımlar/HASCHESTER/10.jpg"
+        "photo": "/img/oyuncular/takımlar/HASCHESTER/10.jpg"
       },
       {
         "name": "Bora Yiğit Kızır",
         "number": 21,
         "position": "Stoper",
-        "photo": "img/oyuncular/takımlar/HASCHESTER/21.jpg"
+        "photo": "/img/oyuncular/takımlar/HASCHESTER/21.jpg"
       }
     ],
     "matches": []
@@ -269,7 +269,7 @@
     "id": "hasimpasa",
     "sosyal": "https://www.instagram.com/hasimpasask285253/",
     "name": "HASIMPASA",
-    "logo": "../img/logolar/takimlar/hasimpasa.png",
+    "logo": "/img/logolar/takimlar/hasimpasa.png",
     "founded": "2026",
     "ranking": 6,
     "misyon": "",
@@ -326,7 +326,7 @@
     "id": "haspool",
     "sosyal": "https://www.instagram.com/haspool_official/",
     "name": "HASPOOL",
-    "logo": "../img/logolar/takimlar/haspool.png",
+    "logo": "/img/logolar/takimlar/haspool.png",
     "founded": "2026",
     "ranking": 7,
     "misyon": "Taraftarlamıza ve bütün izleyenlere şerefli güzel kalitede futbol izletmek.Tarihimize şerefli şampiyonluklar ve başarılar kazandırmak.",
@@ -335,68 +335,68 @@
         "name": "Mustafa Arda Güney",
         "number": "61",
         "position": "Kaleci",
-        "photo": "img/oyuncular/takımlar/HASPOOL/61.jpg"
+        "photo": "/img/oyuncular/takımlar/HASPOOL/61.jpg"
 
       },
       {
         "name": "Ali Efe Üstün",
         "number": "1",
         "position": "Kaleci",
-        "photo": "img/oyuncular/takımlar/HASPOOL/1.jpg"
+        "photo": "/img/oyuncular/takımlar/HASPOOL/1.jpg"
       },
       {
         "name": "Ömer Eren Duygun",
         "number": "10",
         "position": "Orta Saha",
-        "photo": "img/oyuncular/takımlar/HASPOOL/10.jpg"
+        "photo": "/img/oyuncular/takımlar/HASPOOL/10.jpg"
       },
       {
         "name": "Mehmet Ali Erdemir",
         "number": "2",
         "position": "Stoper",
-        "photo": "img/oyuncular/takımlar/HASPOOL/2.jpg"
+        "photo": "/img/oyuncular/takımlar/HASPOOL/2.jpg"
       },
       {
         "name": "Erkan Ada Güven",
         "number": "22",
         "position": "Stoper",
-        "photo": "img/oyuncular/takımlar/HASPOOL/22.jpg"
+        "photo": "/img/oyuncular/takımlar/HASPOOL/22.jpg"
       },
       {
         "name": "Mustafa Berkay Demirok",
         "number": "8",
         "position": "Sağ Kanat",
-        "photo": "img/oyuncular/takımlar/HASPOOL/8.jpg"
+        "photo": "/img/oyuncular/takımlar/HASPOOL/8.jpg"
       },
       {
         "name": "Can Çetinkaya",
         "number": "5",
         "position": "Orta Saha",
-        "photo": "img/oyuncular/takımlar/HASPOOL/5.jpg"
+        "photo": "/img/oyuncular/takımlar/HASPOOL/5.jpg"
       },
       {
         "name": "Ahmed Kerem Öztürk",
         "number": "11",
         "position": "Sol Kanat",
-        "photo": "img/oyuncular/takımlar/HASPOOL/11.jpg"
+        "photo": "/img/oyuncular/takımlar/HASPOOL/11.jpg"
       },
       {
         "name": "Egemen Ayaz Yeşil",
         "number": "7",
         "position": "Sol Kanat",
-        "photo": "img/oyuncular/takımlar/HASPOOL/7.jpg"
+        "photo": "/img/oyuncular/takımlar/HASPOOL/7.jpg"
       },
       {
         "name": "Ahmet Egemen Doğan",
         "number": "9",
         "position": "Santrafor",
-        "photo": "img/oyuncular/takımlar/HASPOOL/9.jpg"
+        "photo": "/img/oyuncular/takımlar/HASPOOL/9.jpg"
       },
       {
         "name": "Mehmet Talha Girgin",
         "number": "21",
         "position": "Stoper",
-        "photo": "img/oyuncular/takımlar/HASPOOL/21.jpg"
+        "photo": "/img/oyuncular/takımlar/HASPOOL/21.jpg"
       }
     ],
     "matches": []
@@ -405,7 +405,7 @@
     "id": "hassenal",
     "sosyal": "https://www.instagram.com/hassenal_fc/",
     "name": "HASSENAL",
-    "logo": "../img/logolar/takimlar/hassenal.png",
+    "logo": "/img/logolar/takimlar/hassenal.png",
     "founded": "2026",
     "ranking": 8,
     "misyon": "Hassenal futbol takımı olarak, her maçta sahaya inancımızı, dayanışmamızı ve güçlü takım ruhumuzu yansıtarak mücadele etmeyi hedefliyoruz. Birlik içinde oynayan, pes etmeyen ve her karşılaşmada elinden gelenin en iyisini ortaya koyan bir ekip olarak, rakiplerimize karşı azmimiz ve karakterimizle öne çıkmayı amaçlıyoruz. Amacımız yalnızca kazanmak değil; sahada saygıyı, fair-play anlayışını ve birlikte başarma inancını temsil eden, mücadelesiyle takdir edilen bir takım olmaktır.",
@@ -467,7 +467,7 @@
     "id": "hassiko_madrid",
     "sosyal": "https://www.instagram.com/hassikomadrid/",
     "name": "HASSIKO MADRID",
-    "logo": "../img/logolar/takimlar/hassiko_madrid.png",
+    "logo": "/img/logolar/takimlar/hassiko_madrid.png",
     "founded": "2026",
     "ranking": 9,
     "misyon": "Hassiko Madrid olarak biz, Kadir Has Anadolu Lisesi 11/A sınıfından çıkan bir ekip olarak sahada sadece kazanmayı değil, birlik olmayı, mücadeleyi ve karakterli futbolu temsil ederiz. Amacımız; disiplinli çalışarak yeteneklerimizi geliştirmek, takım ruhunu en üst seviyeye taşımak ve her maçta sonuna kadar savaşmaktır. Sahada saygıyı, dostluğu ve fair-play ruhunu koruyarak, hem sınıfımızı hem de kendimizi en iyi şekilde temsil ederiz. Bizim için futbol sadece oyun değil, bir duruş meselesidir.",
@@ -476,49 +476,49 @@
         "name": "Kaan Seis",
         "number": 61,
         "position": "Santrafor",
-        "photo": "img/oyuncular/takımlar/HASSIKO MADRID/61.jpg"
+        "photo": "/img/oyuncular/takımlar/HASSIKO MADRID/61.jpg"
       },
       {
         "name": "Emir Serdar",
         "number": 15,
         "position": "Orta Saha",
-        "photo": "img/oyuncular/takımlar/HASSIKO MADRID/15.jpg"
+        "photo": "/img/oyuncular/takımlar/HASSIKO MADRID/15.jpg"
       },
       {
         "name": "Mert Akif Aslan",
         "number": 45,
         "position": "Santrafor",
-        "photo": "img/oyuncular/takımlar/HASSIKO MADRID/45.jpg"
+        "photo": "/img/oyuncular/takımlar/HASSIKO MADRID/45.jpg"
       },
       {
         "name": "Tolga Erdem",
         "number": 8,
         "position": "Stoper",
-        "photo": "img/oyuncular/takımlar/HASSIKO MADRID/8.jpg"
+        "photo": "/img/oyuncular/takımlar/HASSIKO MADRID/8.jpg"
       },
       {
         "name": "Ömer Asaf Gündoğdu",
         "number": 2,
         "position": "Stoper",
-        "photo": "img/oyuncular/takımlar/HASSIKO MADRID/2.jpg"
+        "photo": "/img/oyuncular/takımlar/HASSIKO MADRID/2.jpg"
       },
       {
         "name": "Mete Çetinkaya",
         "number": "1",
         "position": "Kaleci",
-        "photo": "img/oyuncular/takımlar/HASSIKO MADRID/1.jpg"
+        "photo": "/img/oyuncular/takımlar/HASSIKO MADRID/1.jpg"
       },
       {
         "name": "Muhammed Mert Yılmaz",
         "number": 10,
         "position": "Santrafor",
-        "photo": "img/oyuncular/takımlar/HASSIKO MADRID/10.jpg"
+        "photo": "/img/oyuncular/takımlar/HASSIKO MADRID/10.jpg"
       },
       {
         "name": "Volkan Ergüven",
         "number": 11,
         "position": "Orta Saha",
-        "photo": "img/oyuncular/takımlar/HASSIKO MADRID/11.jpg"
+        "photo": "/img/oyuncular/takımlar/HASSIKO MADRID/11.jpg"
       }
     ],
     "matches": []
@@ -527,7 +527,7 @@
     "id": "hassingham",
     "sosyal": "https://www.instagram.com/hassinghampalace.fc/",
     "name": "HASSINGHAM",
-    "logo": "../img/logolar/takimlar/hassingham.png",
+    "logo": "/img/logolar/takimlar/hassingham.png",
     "founded": "2026",
     "ranking": 10,
     "misyon": "Sahada rekabetçi, disiplinli ve estetik futbol oynayan bir takım oluştururken, aynı zamanda genç yetenekleri keşfetmek ve geliştirmektir. Kulüp; fair-play ruhunu benimseyen, taraftarıyla güçlü bağ kuran ve bulunduğu topluma değer katan bir spor kültürü oluşturmayı hedefler. Hassingham Palace, sadece başarı odaklı değil; karakterli oyuncular yetiştiren, futbolu bir yaşam disiplini olarak gören ve her seviyede sürdürülebilir gelişimi amaçlayan bir kulüp olmayı misyon edinmiştir.",
@@ -536,61 +536,61 @@
         "name": "Kadir Tuğra Çakmak",
         "number": 10,
         "position": "Orta Saha",
-        "photo": "img/oyuncular/takımlar/HASSINGHAM/10.jpg"
+        "photo": "/img/oyuncular/takımlar/HASSINGHAM/10.jpg"
       },
       {
         "name": "Mustafa Erdem Eşen",
         "number": 99,
         "position": "Santrafor",
-        "photo": "img/oyuncular/takımlar/HASSINGHAM/99.jpg"
+        "photo": "/img/oyuncular/takımlar/HASSINGHAM/99.jpg"
       },
       {
         "name": "Onur Kerem Kalkan",
         "number": 7,
         "position": "Orta Saha",
-        "photo": "img/oyuncular/takımlar/HASSINGHAM/7.jpg"
+        "photo": "/img/oyuncular/takımlar/HASSINGHAM/7.jpg"
       },
       {
         "name": "Deniz Yazıcı",
         "number": 69,
         "position": "Stoper",
-        "photo": "img/oyuncular/takımlar/HASSINGHAM/69.jpg"
+        "photo": "/img/oyuncular/takımlar/HASSINGHAM/69.jpg"
       },
       {
         "name": "Ali Rüzgar Akkuş",
         "number": 31,
         "position": "Stoper",
-        "photo": "img/oyuncular/takımlar/HASSINGHAM/31.jpg"
+        "photo": "/img/oyuncular/takımlar/HASSINGHAM/31.jpg"
       },
       {
         "name": "Doruk Daşkafa",
         "number": 35,
         "position": "Stoper",
-        "photo": "img/oyuncular/takımlar/HASSINGHAM/35.jpg"
+        "photo": "/img/oyuncular/takımlar/HASSINGHAM/35.jpg"
       },
       {
         "name": "Yiğit Berk Eşen",
         "number": 3,
         "position": "Stoper",
-        "photo": "img/oyuncular/takımlar/HASSINGHAM/3.jpg"
+        "photo": "/img/oyuncular/takımlar/HASSINGHAM/3.jpg"
       },
       {
         "name": "Doğu Özkan Selbuz",
         "number": 6,
         "position": "Santrafor",
-        "photo": "img/oyuncular/takımlar/HASSINGHAM/6.jpg"
+        "photo": "/img/oyuncular/takımlar/HASSINGHAM/6.jpg"
       },
       {
         "name": "Uğur Mert Erdem",
         "number": "25",
         "position": "Kaleci",
-        "photo": "img/oyuncular/takımlar/HASSINGHAM/25.jpg"
+        "photo": "/img/oyuncular/takımlar/HASSINGHAM/25.jpg"
       },
       {
         "name": "Tarık Erdem Cenk",
         "number": 4,
         "position": "Stoper",
-        "photo": "img/oyuncular/takımlar/HASSINGHAM/4.jpg"
+        "photo": "/img/oyuncular/takımlar/HASSINGHAM/4.jpg"
       }
     ],
     "matches": []
@@ -599,7 +599,7 @@
     "id": "newhastle",
     "sosyal": "https://www.instagram.com/newhastleunited/",
     "name": "NEWHASTLE",
-    "logo": "../img/logolar/takimlar/newhastle.png",
+    "logo": "/img/logolar/takimlar/newhastle.png",
     "founded": "2026",
     "ranking": 11,
     "misyon": "Sahada mücadeleyi, azmi ve disiplini kendine şiar edinerek; kendi yetiştirdiği oyuncularla sürdürülebilir başarı elde eden, taraftarlarına gurur yaşatan ve futbolun birleştirici gücünü topluma yayan, Kadir Has Anadolu Lisesi’ne layık bir kulüp olmak.",
@@ -656,7 +656,7 @@
     "id": "westhast",
     "sosyal": "https://www.instagram.com/westhas_united/",
     "name": "WESTHAS",
-    "logo": "../img/logolar/takimlar/westhas.png",
+    "logo": "/img/logolar/takimlar/westhas.png",
     "founded": "2025",
     "ranking": 12,
     "misyon": "Westhas United ailesi olarak misyonumuz ulu önderimiz Mustafa Kemal Atatürk'ün de temenni ettiği gibi zeki, çevik ve ahlaklı sporcular olarak karşımıza çıkan zorlu basamakları birer birer aşıp, zamanı geldiğinde zirvenin vazgeçilmez ismi olmak. Yeri geldiğinde bu zorlu basamaklarda ayağımız takıldığında sadece oyuncularımızla değil arkamızdaki sayısız taraftarımızın destekleriyle ayağa kalkıp yolumuza kaldığımız yerden emin adımlarla ilerlemektir.",
@@ -665,73 +665,73 @@
         "name": "Gazi Efe Kaya",
         "number": 10,
         "position": "Orta Saha",
-        "photo": "img/oyuncular/takımlar/WESTHAS/10.jpg"
+        "photo": "/img/oyuncular/takımlar/WESTHAS/10.jpg"
       },
       {
         "name": "İsmail İbar",
         "number": 9,
         "position": "Stoper",
-        "photo": "img/oyuncular/takımlar/WESTHAS/9.jpg"
+        "photo": "/img/oyuncular/takımlar/WESTHAS/9.jpg"
       },
       {
         "name": "Kuzey Kaya",
         "number": 99,
         "position": "Santrafor",
-        "photo": "img/oyuncular/takımlar/WESTHAS/99.jpg"
+        "photo": "/img/oyuncular/takımlar/WESTHAS/99.jpg"
       },
       {
         "name": "Ömer Arda Özcan",
         "number": 11,
         "position": "Stoper",
-        "photo": "img/oyuncular/takımlar/WESTHAS/11.jpg"
+        "photo": "/img/oyuncular/takımlar/WESTHAS/11.jpg"
       },
       {
         "name": "Ata Erdem",
         "number": 23,
         "position": "Santrafor",
-        "photo": "img/oyuncular/takımlar/WESTHAS/23.jpg"
+        "photo": "/img/oyuncular/takımlar/WESTHAS/23.jpg"
       },
       {
         "name": "Burak Bakar",
         "number": "7",
         "position": "Kaleci",
-        "photo": "img/oyuncular/takımlar/WESTHAS/7.jpg"
+        "photo": "/img/oyuncular/takımlar/WESTHAS/7.jpg"
       },
       {
         "name": "Kerem Sarp Keskin",
         "number": 24,
         "position": "Orta Saha",
-        "photo": "img/oyuncular/takımlar/WESTHAS/24.jpg"
+        "photo": "/img/oyuncular/takımlar/WESTHAS/24.jpg"
       },
       {
         "name": "Ege Yılmaz",
         "number": 4,
         "position": "Stoper",
-        "photo": "img/oyuncular/takımlar/WESTHAS/4.jpg"
+        "photo": "/img/oyuncular/takımlar/WESTHAS/4.jpg"
       },
       {
         "name": "Ahmet Cihan Çolak",
         "number": 5,
         "position": "Stoper",
-        "photo": "img/oyuncular/takımlar/WESTHAS/5.jpg"
+        "photo": "/img/oyuncular/takımlar/WESTHAS/5.jpg"
       },
       {
         "name": "Alp Turan",
         "number": 31,
         "position": "Orta Saha",
-        "photo": "img/oyuncular/takımlar/WESTHAS/31.jpg"
+        "photo": "/img/oyuncular/takımlar/WESTHAS/31.jpg"
       },
       {
         "name": "Enes Taha Zor",
         "number": 25,
         "position": "Kaleci",
-        "photo": "img/oyuncular/takımlar/WESTHAS/25.jpg"
+        "photo": "/img/oyuncular/takımlar/WESTHAS/25.jpg"
       },
       {
         "name": "Arın Şentürk",
         "number": 93,
         "position": "Santrafor",
-        "photo": "img/oyuncular/takımlar/WESTHAS/93.jpg"
+        "photo": "/img/oyuncular/takımlar/WESTHAS/93.jpg"
       }
     ],
     "matches": []
@@ -740,7 +740,7 @@
     "id": "has-united",
     "name": "HAS UNITED",
     "sosyal": "https://www.instagram.com/has_united/",
-    "logo": "../img/logolar/takimlar/has_united.png",
+    "logo": "/img/logolar/takimlar/has_united.png",
     "founded": "2024",
     "ranking": 2,
     "misyon": "Futbola olan bağımlılığımızdan ve futbol kulübü açma isteğiyle bu kulübü açmaya karar verdik. Olabildiğince galibiyet almayı amaçlıyoruz.",
@@ -749,61 +749,61 @@
         "name": "Yusuf Kemal Baran",
         "number": 10,
         "position": "Sağ Kanat",
-        "photo": "img/oyuncular/takımlar/HAS UNITED/10.jpg"
+        "photo": "/img/oyuncular/takımlar/HAS UNITED/10.jpg"
       },
       {
         "name": "Mehmet Akif Alparslan",
         "number": 21,
         "position": "Orta Saha",
-        "photo": "img/oyuncular/takımlar/HAS UNITED/21.jpg"
+        "photo": "/img/oyuncular/takımlar/HAS UNITED/21.jpg"
       },
       {
         "name": "Yusuf Kayra Erdoğan",
         "number": 1,
         "position": "Kaleci",
-        "photo": "img/oyuncular/takımlar/HAS UNITED/1.jpg"
+        "photo": "/img/oyuncular/takımlar/HAS UNITED/1.jpg"
       },
       {
         "name": "Yiğit Öztürk",
         "number": 9,
         "position": "Santrafor",
-        "photo": "img/oyuncular/takımlar/HAS UNITED/9.jpg"
+        "photo": "/img/oyuncular/takımlar/HAS UNITED/9.jpg"
       },
       {
         "name": "Yusuf Salih Alkan",
         "number": 88,
         "position": "Stoper",
-        "photo": "img/oyuncular/takımlar/HAS UNITED/88.jpg"
+        "photo": "/img/oyuncular/takımlar/HAS UNITED/88.jpg"
       },
       {
         "name": "Ali Uras Memiş",
         "number": 19,
         "position": "Sol Kanat",
-        "photo": "img/oyuncular/takımlar/HAS UNITED/19.jpg"
+        "photo": "/img/oyuncular/takımlar/HAS UNITED/19.jpg"
       },
       {
         "name": "Kerem Kıratlılar",
         "number": 7,
         "position": "Sol Bek",
-        "photo": "img/oyuncular/takımlar/HAS UNITED/7.jpg"
+        "photo": "/img/oyuncular/takımlar/HAS UNITED/7.jpg"
       },
       {
         "name": "Dağhan Koral",
         "number": 31,
         "position": "Stoper",
-        "photo": "img/oyuncular/takımlar/HAS UNITED/31.jpg"
+        "photo": "/img/oyuncular/takımlar/HAS UNITED/31.jpg"
       },
       {
         "name": "Arda Ünsal",
         "number": 48,
         "position": "Sağ Bek",
-        "photo": "img/oyuncular/takımlar/HAS UNITED/48.jpg"
+        "photo": "/img/oyuncular/takımlar/HAS UNITED/48.jpg"
       },
       {
         "name": "Ege Arkunkütak",
         "number": 18,
         "position": "Stoper",
-        "photo": "img/oyuncular/takımlar/HAS UNITED/18.jpg"
+        "photo": "/img/oyuncular/takımlar/HAS UNITED/18.jpg"
       }
     ],
     "matches": []

@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const MONGODB_URI = process.env.MONGO_URI || process.env.MONGODB_URI || null;
+const isValidMongoURI = typeof MONGODB_URI === 'string' && /^(mongodb(?:\+srv)?:\/\/)/.test(MONGODB_URI);
 
 let cached = global._mongoose;
 if (!cached) {
@@ -8,8 +9,8 @@ if (!cached) {
 }
 
 async function connectDB() {
-  if (!MONGODB_URI) {
-    throw new Error('MONGO_URI environment variable is not set');
+  if (!isValidMongoURI) {
+    throw new Error('MONGO_URI environment variable is not set or is invalid');
   }
 
   if (cached.conn) {
@@ -31,5 +32,5 @@ async function connectDB() {
 
 module.exports = {
   connectDB,
-  hasMongoURI: Boolean(MONGODB_URI)
+  hasMongoURI: isValidMongoURI
 };

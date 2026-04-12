@@ -11,7 +11,9 @@ module.exports = async (req, res) => {
           await connectDB();
           await seedMatchesIfEmpty();
           const matches = await Match.find().lean();
-          return res.status(200).json(matches);
+          if (matches.length > 0) {
+            return res.status(200).json(matches);
+          }
         } catch (err) {
           console.error('Matches DB failed, falling back to matches.json', err);
         }

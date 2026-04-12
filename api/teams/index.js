@@ -11,7 +11,9 @@ module.exports = async (req, res) => {
           await connectDB();
           await seedTeamsIfEmpty();
           const teams = await Team.find().sort({ ranking: 1 }).lean();
-          return res.status(200).json(teams);
+          if (teams.length > 0) {
+            return res.status(200).json(teams);
+          }
         } catch (err) {
           console.error('Teams DB failed, falling back to teams.json', err);
         }
