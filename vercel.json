@@ -9,6 +9,8 @@
     { "src": "img/**/*", "use": "@vercel/static" }
   ],
   "routes": [
+    { "src": "^/api/teams/([^/]+)/players/([^/]+)$", "dest": "/api/teams/[id]/players/[index].js" },
+    { "src": "^/api/teams/([^/]+)/players$", "dest": "/api/teams/[id]/players/index.js" },
     { "src": "^/api/(.*)$", "dest": "/api/$1" },
     { "handle": "filesystem" },
     { "src": "^/team/([^/]+)$", "dest": "/team.html" },
