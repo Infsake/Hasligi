@@ -4,8 +4,8 @@ const playerIndex = parseInt(urlParams.get('index'));
 
 async function loadPlayerDetails() {
     const [teamsRes, matchesRes] = await Promise.all([
-        fetch('./teams.json'),
-        fetch('./matches.json')
+        fetch('/api/teams'),
+        fetch('/api/matches')
     ]);
     const teams = await teamsRes.json();
     const matches = await matchesRes.json();

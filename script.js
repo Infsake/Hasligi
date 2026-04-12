@@ -19,8 +19,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 async function loadTeams() {
     const [teamsRes, matchesRes] = await Promise.all([
-        fetch('./teams.json'),
-        fetch('./matches.json')
+        fetch('/api/teams'),
+        fetch('/api/matches')
     ]);
 
     const teams = await teamsRes.json();

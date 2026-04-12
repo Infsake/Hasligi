@@ -1,7 +1,7 @@
 async function loadStandings() {
     const [teamsRes, matchesRes] = await Promise.all([
-        fetch('./teams.json'),
-        fetch('./matches.json')
+        fetch('/api/teams'),
+        fetch('/api/matches')
     ]);
     const teams = await teamsRes.json();
     const matches = await matchesRes.json();
@@ -138,8 +138,8 @@ function createMatchCard(match, teams) {
 
 async function loadMatches() {
     const [matchesRes, teamsRes] = await Promise.all([
-        fetch('./matches.json'),
-        fetch('./teams.json')
+        fetch('/api/matches'),
+        fetch('/api/teams')
     ]);
     const matches = await matchesRes.json();
     const teams = await teamsRes.json();
@@ -153,7 +153,7 @@ async function loadMatches() {
 }
 
 function showMatchDetails(matchId) {
-    fetch('./matches.json').then(res => res.json()).then(matches => {
+    fetch('/api/matches').then(res => res.json()).then(matches => {
         const match = matches.find(m => m.id === matchId);
         if (!match || !match.goals) return;
         let details = `Maç: ${match.home} vs ${match.away}\nSkor: ${match.score}\n\nGol Detayları:\n`;

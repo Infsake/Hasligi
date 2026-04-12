@@ -3,7 +3,7 @@ const teamId = params.get('id');
 
 async function loadTeamDetails() {
     try {
-        const response = await fetch('./teams.json');
+        const response = await fetch('/api/teams');
         if (!response.ok) throw new Error('Teams fetch failed: ' + response.status);
         const teams = await response.json();
         const team = teams.find(t => t.id === teamId);
@@ -19,7 +19,7 @@ async function loadTeamDetails() {
     document.getElementById('ranking').textContent = team.ranking;
     
     // Load matches to calculate player stats
-    const matchesRes = await fetch('./matches.json');
+    const matchesRes = await fetch('/api/matches');
     const matches = await matchesRes.json();
     
     // Calculate player statistics

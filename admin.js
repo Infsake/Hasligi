@@ -20,7 +20,7 @@ function selectTab(tabId) {
 }
 
 async function loadTeamOptions() {
-    const response = await fetch('./teams.json');
+    const response = await fetch('/api/teams');
     const teams = await response.json();
     const team1 = document.getElementById('team1');
     const team2 = document.getElementById('team2');
@@ -54,7 +54,7 @@ async function loadTeamOptions() {
 }
 
 async function loadMatchOptions() {
-    const response = await fetch('./matches.json');
+    const response = await fetch('/api/matches');
     const matches = await response.json();
     const matchSelect = document.getElementById('match-select');
     matchSelect.innerHTML = '<option value="" disabled selected>Maç seç</option>';
@@ -127,7 +127,7 @@ document.getElementById('edit-player-team').addEventListener('change', async (e)
     
     if (!teamId) return;
     
-    const response = await fetch('./teams.json');
+    const response = await fetch('/api/teams');
     const teams = await response.json();
     const team = teams.find(t => t.id === teamId);
     
@@ -170,18 +170,10 @@ document.getElementById('edit-player-form').onsubmit = async (e) => {
     };
     
     try {
-        const data = new FormData();
-        data.append('name', updatedPlayer.name);
-        data.append('number', updatedPlayer.number);
-        data.append('position', updatedPlayer.position);
-        const photoInput = document.getElementById('edit-player-photo');
-        if (photoInput.files[0]) {
-            data.append('photo', photoInput.files[0]);
-        }
-
         const response = await fetch(`/api/teams/${teamId}/players/${playerIndex}`, {
             method: 'PUT',
-            body: data
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updatedPlayer)
         });
         if (response.ok) {
             alert('Oyuncu başarıyla güncellendi!');
@@ -212,7 +204,7 @@ function updateGoalDetails() {
         const awayTeam = selectedOption.dataset.away;
 
         // Get players for both teams
-        fetch('./teams.json').then(res => res.json()).then(teams => {
+        fetch('/api/teams').then(res => res.json()).then(teams => {
             const homePlayers = teams.find(t => t.name === homeTeam)?.players || [];
             const awayPlayers = teams.find(t => t.name === awayTeam)?.players || [];
 
@@ -290,16 +282,10 @@ document.getElementById('player-form').onsubmit = async (e) => {
         position: formData.get('position')
     };
     try {
-        const data = new FormData();
-        data.append('player', JSON.stringify(playerData));
-        const photoInput = document.getElementById('player-photo');
-        if (photoInput.files[0]) {
-            data.append('photo', photoInput.files[0]);
-        }
-
         const response = await fetch(`/api/teams/${teamId}/players`, {
             method: 'PUT',
-            body: data
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ player: playerData })
         });
         if (response.ok) {
             alert('Oyuncu başarıyla eklendi!');
@@ -348,7 +334,7 @@ document.getElementById('result-form').onsubmit = async (e) => {
     const link = formData.get('link') || null;
 
     // Get match details to know which team is home/away
-    const matches = await fetch('./matches.json').then(r => r.json());
+    const matches = await fetch('/api/matches').then(r => r.json());
     const match = matches.find(m => m.id === matchId);
     const homeTeam = match.home;
     const awayTeam = match.away;

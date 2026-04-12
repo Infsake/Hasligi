@@ -10,6 +10,7 @@
     "express": "^4.18.2",
     "cors": "^2.8.5",
     "express-fileupload": "^1.4.0",
-    "sharp": "^0.33.0"
+    "sharp": "^0.33.0",
+    "mongoose": "^7.5.0"
   }
 }

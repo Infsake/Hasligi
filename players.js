@@ -3,8 +3,8 @@ let currentSort = 'gol'; // default sort by gol
 async function loadPlayers() {
     try {
         const [teamsRes, matchesRes] = await Promise.all([
-            fetch('./teams.json'),
-            fetch('./matches.json')
+            fetch('/api/teams'),
+            fetch('/api/matches')
         ]);
         if (!teamsRes.ok) throw new Error('Teams fetch failed: ' + teamsRes.status);
         if (!matchesRes.ok) throw new Error('Matches fetch failed: ' + matchesRes.status);
