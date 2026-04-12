@@ -124,6 +124,30 @@ app.put('/api/teams/:id/players/:index', async (req, res) => {
   }
 });
 
+app.put('/api/update-player', async (req, res) => {
+  try {
+    const teams = await readData('teams.json');
+    const { teamId, playerIndex, player } = req.body;
+    if (!teamId || typeof playerIndex === 'undefined' || !player) {
+      return res.status(400).send('teamId, playerIndex ve player gereklidir');
+    }
+
+    const team = teams.find((t) => t.id === teamId);
+    if (!team) return res.status(404).send('Takım bulunamadı');
+
+    const index = parseInt(playerIndex, 10);
+    if (Number.isNaN(index) || index < 0 || index >= team.players.length) {
+      return res.status(404).send('Oyuncu bulunamadı');
+    }
+
+    team.players[index] = player;
+    await writeData('teams.json', teams);
+    res.json(team);
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+});
+
 app.get('/api/matches', async (req, res) => {
   try {
     const matches = await readData('matches.json');
