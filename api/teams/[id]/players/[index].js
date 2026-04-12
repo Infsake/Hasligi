@@ -69,8 +69,10 @@ module.exports = async (req, res) => {
     }
 
     // Handle photo upload
-    if (req.files && req.files.photo) {
-      const photo = req.files.photo;
+    if (updatedPlayer.photoBase64) {
+      const base64Data = updatedPlayer.photoBase64.split(',')[1]; // Remove data:image/jpeg;base64,
+      const buffer = Buffer.from(base64Data, 'base64');
+      
       const uploadDir = path.join(__dirname, '../../../img/oyuncular/takımlar', team.name);
       
       // Ensure directory exists
@@ -79,17 +81,18 @@ module.exports = async (req, res) => {
       }
 
       // Generate filename
-      const ext = path.extname(photo.name);
+      const ext = '.jpg'; // Since we convert to JPEG
       const filename = `${updatedPlayer.name.replace(/[^a-zA-Z0-9]/g, '_')}_${Date.now()}${ext}`;
       const filepath = path.join(uploadDir, filename);
 
       // Process and save image
-      await sharp(photo.data)
+      await sharp(buffer)
         .resize(300, 300, { fit: 'cover' })
         .jpeg({ quality: 80 })
         .toFile(filepath);
 
       updatedPlayer.photo = `/img/oyuncular/takımlar/${team.name}/${filename}`;
+      delete updatedPlayer.photoBase64; // Remove base64 from player data
     }
 
     team.players[playerIndex] = updatedPlayer;
