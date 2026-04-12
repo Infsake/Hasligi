@@ -1,4 +1,4 @@
-const connectDB = require('../../../db');
+const { connectDB, hasMongoURI } = require('../../../db');
 const { Team } = require('../../../models');
 const { seedTeamsIfEmpty } = require('../../../utils');
 
