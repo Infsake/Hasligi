@@ -180,10 +180,10 @@ document.getElementById('edit-player-form').onsubmit = async (e) => {
     };
     
     try {
-        const response = await fetch('/api/update-player', {
+        const response = await fetch(`/api/teams/${teamId}/players/${playerIndex}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ teamId, playerIndex, player: updatedPlayer })
+            body: JSON.stringify(updatedPlayer)
         });
         if (response.ok) {
             alert('Oyuncu başarıyla güncellendi!');
