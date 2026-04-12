@@ -179,10 +179,8 @@ document.getElementById('edit-player-form').onsubmit = async (e) => {
         position: formData.get('position')
     };
     
-    // Add photo to formData if exists
-    if (formData.get('photo')) {
-        // Photo is already in formData
-    }
+    // Add player data to formData
+    formData.set('player', JSON.stringify(updatedPlayer));
     
     try {
         const response = await fetch(`/api/teams/${teamId}/players/${playerIndex}`, {
