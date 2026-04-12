@@ -2,9 +2,8 @@
   "name": "football-tournament",
   "version": "1.0.0",
   "description": "School football tournament website",
-  "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "vercel-build": "echo \"No build required\""
   },
   "dependencies": {
     "express": "^4.18.2",
