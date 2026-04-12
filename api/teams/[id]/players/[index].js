@@ -57,8 +57,8 @@ module.exports = async (req, res) => {
       return res.status(404).send('Oyuncu bulunamadı');
     }
 
-    const updatedPlayer = req.body;
-    if (!updatedPlayer || typeof updatedPlayer !== 'object') {
+    const updatedPlayer = req.body.player || req.body;
+    if (!updatedPlayer || typeof updatedPlayer !== 'object' || Array.isArray(updatedPlayer)) {
       return res.status(400).send('Oyuncu verisi gerekli');
     }
 
