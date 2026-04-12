@@ -1,13 +1,19 @@
 {
   "version": 2,
+  "builds": [
+    { "src": "api/**/*.js", "use": "@vercel/node" },
+    { "src": "*.html", "use": "@vercel/static" },
+    { "src": "*.js", "use": "@vercel/static" },
+    { "src": "styles.css", "use": "@vercel/static" }
+  ],
   "routes": [
     { "src": "^/api/(.*)$", "dest": "/api/$1" },
     { "handle": "filesystem" },
-    { "src": "^/$", "dest": "/index.html" },
+    { "src": "^/team/([^/]+)$", "dest": "/team.html" },
     { "src": "^/admin$", "dest": "/admin.html" },
     { "src": "^/player$", "dest": "/player.html" },
     { "src": "^/players$", "dest": "/players.html" },
     { "src": "^/league$", "dest": "/league.html" },
-    { "src": "^/team/([^/]+)$", "dest": "/team.html" }
+    { "src": "^/$", "dest": "/index.html" }
   ]
 }
