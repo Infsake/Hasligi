@@ -7,12 +7,17 @@ const path = require('path');
 const sharp = require('sharp');
 
 function getTeamIdFromRequest(req) {
+  // First try body (most reliable)
   if (req.body && req.body.teamId) {
     return req.body.teamId;
   }
+  
+  // Then try query
   if (req.query && req.query.id) {
     return req.query.id;
   }
+  
+  // Finally try URL path
   const parsed = url.parse(req.url || '', true);
   if (!parsed.pathname) return null;
   const segments = parsed.pathname.split('/').filter(Boolean);

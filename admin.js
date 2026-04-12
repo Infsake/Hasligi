@@ -194,7 +194,7 @@ document.getElementById('edit-player-form').onsubmit = async (e) => {
             const response = await fetch(`/api/teams/${teamId}/players/${playerIndex}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ player: updatedPlayer })
+                body: JSON.stringify({ player: updatedPlayer, playerIndex: parseInt(playerIndex) })
             });
             if (response.ok) {
                 alert('Oyuncu başarıyla güncellendi!');
@@ -322,7 +322,7 @@ document.getElementById('player-form').onsubmit = async (e) => {
             const response = await fetch(`/api/teams/${teamId}/players`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ player: playerData })
+                body: JSON.stringify({ player: playerData, teamId: teamId })
             });
             if (response.ok) {
                 alert('Oyuncu başarıyla eklendi!');

@@ -7,16 +7,25 @@ const path = require('path');
 const sharp = require('sharp');
 
 function getTeamAndIndexFromRequest(req) {
-  const result = { id: null, index: null };
+  let result = { id: null, index: null };
+  
+  // First, try to get from body (most reliable)
   if (req.body) {
     if (req.body.teamId) result.id = req.body.teamId;
-    if (typeof req.body.playerIndex !== 'undefined') result.index = req.body.playerIndex;
+    if (typeof req.body.playerIndex !== 'undefined') {
+      result.index = req.body.playerIndex;
+      // If we got both from body, return immediately
+      if (result.id && typeof result.index !== 'undefined') return result;
+    }
   }
+
+  // Then try from query
   if (req.query) {
     if (!result.id && req.query.id) result.id = req.query.id;
     if (typeof result.index === 'undefined' && typeof req.query.index !== 'undefined') result.index = req.query.index;
   }
 
+  // Finally try from URL path
   const parsed = url.parse(req.url || '', true);
   if (parsed.pathname) {
     const segments = parsed.pathname.split('/').filter(Boolean);
@@ -46,8 +55,18 @@ module.exports = async (req, res) => {
     if (!id) {
       return res.status(400).send('Takım idsi eksik');
     }
-    const playerIndex = parseInt(index, 10);
-    if (Number.isNaN(playerIndex)) {
+    
+    // Ensure index is a valid number
+    let playerIndex;
+    if (typeof index === 'string') {
+      playerIndex = parseInt(index, 10);
+    } else if (typeof index === 'number') {
+      playerIndex = index;
+    } else {
+      playerIndex = NaN;
+    }
+    
+    if (Number.isNaN(playerIndex) || playerIndex < 0) {
       return res.status(400).send('Geçersiz oyuncu indeksi');
     }
 
