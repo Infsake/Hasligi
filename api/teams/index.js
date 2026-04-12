@@ -2,8 +2,11 @@ const db = require('../db');
 const { connectDB, hasMongoURI } = db;
 const { Team } = require('../models');
 const { seedTeamsIfEmpty, readJsonFile } = require('../utils');
+const url = require('url');
 
 module.exports = async (req, res) => {
+  const parsed = url.parse(req.url, true);
+  const path = parsed.pathname;
   try {
     if (req.method === 'GET') {
       if (hasMongoURI) {
@@ -48,7 +51,26 @@ module.exports = async (req, res) => {
       return res.status(201).json(newTeam);
     }
 
-    res.setHeader('Allow', 'GET, POST');
+    if (req.method === 'PUT' && path.match(/^\/api\/teams\/[^\/]+\/players$/)) {
+      const teamId = path.split('/')[3];
+      if (!hasMongoURI) {
+        return res.status(500).send('MONGO_URI environment variable is not set on Vercel');
+      }
+      await connectDB();
+      const team = await Team.findOne({ id: teamId });
+      if (!team) {
+        return res.status(404).json({ error: 'Takım bulunamadı' });
+      }
+      const { player } = req.body;
+      if (!player || !player.name) {
+        return res.status(400).json({ error: 'Oyuncu bilgileri gerekli' });
+      }
+      team.players.push(player);
+      await team.save();
+      return res.status(200).json(team);
+    }
+
+    res.setHeader('Allow', 'GET, POST, PUT');
     return res.status(405).end('Method not allowed');
   } catch (err) {
     console.error(err);
