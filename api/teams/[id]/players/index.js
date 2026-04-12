@@ -2,6 +2,9 @@ const url = require('url');
 const { connectDB, hasMongoURI } = require('../../../db');
 const { Team } = require('../../../models');
 const { seedTeamsIfEmpty } = require('../../../utils');
+const fs = require('fs');
+const path = require('path');
+const sharp = require('sharp');
 
 function getTeamIdFromRequest(req) {
   if (req.query && req.query.id) {
@@ -37,9 +40,36 @@ module.exports = async (req, res) => {
       return res.status(404).send('Takım bulunamadı');
     }
 
-    const { player } = req.body;
+    let { player } = req.body;
+    if (typeof player === 'string') {
+        player = JSON.parse(player);
+    }
     if (!player || typeof player !== 'object') {
       return res.status(400).send('Oyuncu verisi gerekli');
+    }
+
+    // Handle photo upload
+    if (req.files && req.files.photo) {
+      const photo = req.files.photo;
+      const uploadDir = path.join(__dirname, '../../../img/oyuncular/takımlar', team.name);
+      
+      // Ensure directory exists
+      if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir, { recursive: true });
+      }
+
+      // Generate filename
+      const ext = path.extname(photo.name);
+      const filename = `${player.name.replace(/[^a-zA-Z0-9]/g, '_')}_${Date.now()}${ext}`;
+      const filepath = path.join(uploadDir, filename);
+
+      // Process and save image
+      await sharp(photo.data)
+        .resize(300, 300, { fit: 'cover' })
+        .jpeg({ quality: 80 })
+        .toFile(filepath);
+
+      player.photo = `/img/oyuncular/takımlar/${team.name}/${filename}`;
     }
 
     team.players = Array.isArray(team.players) ? team.players : [];

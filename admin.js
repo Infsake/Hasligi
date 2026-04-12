@@ -179,11 +179,15 @@ document.getElementById('edit-player-form').onsubmit = async (e) => {
         position: formData.get('position')
     };
     
+    // Add photo to formData if exists
+    if (formData.get('photo')) {
+        // Photo is already in formData
+    }
+    
     try {
         const response = await fetch(`/api/teams/${teamId}/players/${playerIndex}`, {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ teamId, playerIndex, player: updatedPlayer })
+            body: formData
         });
         if (response.ok) {
             alert('Oyuncu başarıyla güncellendi!');
@@ -291,11 +295,14 @@ document.getElementById('player-form').onsubmit = async (e) => {
         number: parseInt(formData.get('number')),
         position: formData.get('position')
     };
+    
+    // Add player data to formData
+    formData.set('player', JSON.stringify(playerData));
+    
     try {
         const response = await fetch(`/api/teams/${teamId}/players`, {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ player: playerData })
+            body: formData
         });
         if (response.ok) {
             alert('Oyuncu başarıyla eklendi!');

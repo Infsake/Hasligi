@@ -2,6 +2,9 @@ const url = require('url');
 const { connectDB, hasMongoURI } = require('../../../db');
 const { Team } = require('../../../models');
 const { seedTeamsIfEmpty } = require('../../../utils');
+const fs = require('fs');
+const path = require('path');
+const sharp = require('sharp');
 
 function getTeamAndIndexFromRequest(req) {
   const result = { id: null, index: null };
@@ -57,9 +60,36 @@ module.exports = async (req, res) => {
       return res.status(404).send('Oyuncu bulunamadı');
     }
 
-    const updatedPlayer = req.body.player || req.body;
+    let updatedPlayer = req.body.player || req.body;
+    if (typeof updatedPlayer === 'string') {
+        updatedPlayer = JSON.parse(updatedPlayer);
+    }
     if (!updatedPlayer || typeof updatedPlayer !== 'object' || Array.isArray(updatedPlayer)) {
       return res.status(400).send('Oyuncu verisi gerekli');
+    }
+
+    // Handle photo upload
+    if (req.files && req.files.photo) {
+      const photo = req.files.photo;
+      const uploadDir = path.join(__dirname, '../../../img/oyuncular/takımlar', team.name);
+      
+      // Ensure directory exists
+      if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir, { recursive: true });
+      }
+
+      // Generate filename
+      const ext = path.extname(photo.name);
+      const filename = `${updatedPlayer.name.replace(/[^a-zA-Z0-9]/g, '_')}_${Date.now()}${ext}`;
+      const filepath = path.join(uploadDir, filename);
+
+      // Process and save image
+      await sharp(photo.data)
+        .resize(300, 300, { fit: 'cover' })
+        .jpeg({ quality: 80 })
+        .toFile(filepath);
+
+      updatedPlayer.photo = `/img/oyuncular/takımlar/${team.name}/${filename}`;
     }
 
     team.players[playerIndex] = updatedPlayer;
