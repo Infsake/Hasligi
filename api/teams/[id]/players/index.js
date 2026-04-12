@@ -7,6 +7,9 @@ const path = require('path');
 const sharp = require('sharp');
 
 function getTeamIdFromRequest(req) {
+  if (req.body && req.body.teamId) {
+    return req.body.teamId;
+  }
   if (req.query && req.query.id) {
     return req.query.id;
   }

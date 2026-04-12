@@ -178,6 +178,8 @@ document.getElementById('edit-player-form').onsubmit = async (e) => {
     
     // Add player data to formData
     formData.set('player', JSON.stringify(updatedPlayer));
+    formData.set('playerIndex', playerIndex);
+    formData.set('teamId', teamId);
     
     try {
         const response = await fetch(`/api/teams/${teamId}/players/${playerIndex}`, {
@@ -293,6 +295,7 @@ document.getElementById('player-form').onsubmit = async (e) => {
     
     // Add player data to formData
     formData.set('player', JSON.stringify(playerData));
+    formData.set('teamId', teamId);
     
     try {
         const response = await fetch(`/api/teams/${teamId}/players`, {
