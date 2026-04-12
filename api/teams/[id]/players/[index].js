@@ -5,9 +5,13 @@ const { seedTeamsIfEmpty } = require('../../../utils');
 
 function getTeamAndIndexFromRequest(req) {
   const result = { id: null, index: null };
+  if (req.body) {
+    if (req.body.teamId) result.id = req.body.teamId;
+    if (typeof req.body.playerIndex !== 'undefined') result.index = req.body.playerIndex;
+  }
   if (req.query) {
-    if (req.query.id) result.id = req.query.id;
-    if (typeof req.query.index !== 'undefined') result.index = req.query.index;
+    if (!result.id && req.query.id) result.id = req.query.id;
+    if (typeof result.index === 'undefined' && typeof req.query.index !== 'undefined') result.index = req.query.index;
   }
 
   const parsed = url.parse(req.url || '', true);
