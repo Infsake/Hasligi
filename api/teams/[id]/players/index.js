@@ -1,6 +1,21 @@
+const url = require('url');
 const { connectDB, hasMongoURI } = require('../../../db');
 const { Team } = require('../../../models');
 const { seedTeamsIfEmpty } = require('../../../utils');
+
+function getTeamIdFromRequest(req) {
+  if (req.query && req.query.id) {
+    return req.query.id;
+  }
+  const parsed = url.parse(req.url || '', true);
+  if (!parsed.pathname) return null;
+  const segments = parsed.pathname.split('/').filter(Boolean);
+  const playersIndex = segments.indexOf('players');
+  if (playersIndex > 0) {
+    return segments[playersIndex - 1];
+  }
+  return null;
+}
 
 module.exports = async (req, res) => {
   try {
@@ -12,7 +27,11 @@ module.exports = async (req, res) => {
       return res.status(405).end('Method not allowed');
     }
 
-    const { id } = req.query;
+    const id = getTeamIdFromRequest(req);
+    if (!id) {
+      return res.status(400).send('Takım idsi eksik');
+    }
+
     const team = await Team.findOne({ id });
     if (!team) {
       return res.status(404).send('Takım bulunamadı');
