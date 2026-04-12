@@ -4,9 +4,12 @@
   "devCommand": "",
   "public": false,
   "rewrites": [
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/admin", "destination": "/admin.html" },
     { "source": "/player", "destination": "/player.html" },
     { "source": "/players", "destination": "/players.html" },
     { "source": "/league", "destination": "/league.html" },
-    { "source": "/team/:id", "destination": "/team.html" }
+    { "source": "/team/:id", "destination": "/team.html" },
+    { "source": "/api/:path*", "destination": "/api/:path*" }
   ]
 }
