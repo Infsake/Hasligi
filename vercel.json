@@ -1,15 +1,17 @@
 {
-  "buildCommand": "",
-  "outputDirectory": ".",
-  "devCommand": "",
-  "public": false,
-  "rewrites": [
-    { "source": "/", "destination": "/index.html" },
-    { "source": "/admin", "destination": "/admin.html" },
-    { "source": "/player", "destination": "/player.html" },
-    { "source": "/players", "destination": "/players.html" },
-    { "source": "/league", "destination": "/league.html" },
-    { "source": "/team/:id", "destination": "/team.html" },
-    { "source": "/api/:path*", "destination": "/api/:path*" }
+  "version": 2,
+  "builds": [
+    { "src": "api/**/*.js", "use": "@vercel/node" },
+    { "src": "*.html", "use": "@vercel/static" }
+  ],
+  "routes": [
+    { "src": "^/$", "dest": "/index.html" },
+    { "src": "^/admin$", "dest": "/admin.html" },
+    { "src": "^/player$", "dest": "/player.html" },
+    { "src": "^/players$", "dest": "/players.html" },
+    { "src": "^/league$", "dest": "/league.html" },
+    { "src": "^/team/([^/]+)$", "dest": "/team.html" },
+    { "src": "^/api/(.*)$", "dest": "/api/$1" },
+    { "src": "^(.*)$", "dest": "/$1" }
   ]
 }
