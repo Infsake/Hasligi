@@ -56,31 +56,21 @@ module.exports = async (req, res) => {
       return res.status(400).send('Oyuncu verisi gerekli');
     }
 
-    // Handle photo upload from base64
+    // Handle photo upload from base64 - store compressed base64 in database
     if (player.photoBase64) {
       try {
         const base64Data = player.photoBase64.split(',')[1]; // Remove data:image/jpeg;base64,
         const buffer = Buffer.from(base64Data, 'base64');
-        
-        const uploadDir = path.join(process.cwd(), 'img/oyuncular/takımlar', team.name);
-        
-        // Ensure directory exists
-        if (!fs.existsSync(uploadDir)) {
-          fs.mkdirSync(uploadDir, { recursive: true });
-        }
 
-        // Generate filename
-        const filename = `${player.name.replace(/[^a-zA-Z0-9]/g, '_')}_${Date.now()}.jpg`;
-        const filepath = path.join(uploadDir, filename);
-
-        // Process and save image
-        await sharp(buffer)
+        // Compress and resize image
+        const compressedImage = await sharp(buffer)
           .resize(300, 300, { fit: 'cover' })
-          .jpeg({ quality: 80 })
-          .toFile(filepath);
+          .jpeg({ quality: 60 })
+          .toBuffer();
 
-        player.photo = `/img/oyuncular/takımlar/${team.name}/${filename}`;
-        delete player.photoBase64; // Remove base64 from player data
+        // Store compressed image as base64 in database
+        player.photo = 'data:image/jpeg;base64,' + compressedImage.toString('base64');
+        delete player.photoBase64; // Remove original from player data
       } catch (photoErr) {
         console.error('Photo processing error:', photoErr);
         // Continue without photo if processing fails
