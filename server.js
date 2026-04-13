@@ -229,24 +229,30 @@ app.post('/api/admin/login', async (req, res) => {
       return res.status(400).json({ error: 'Şifre gereklidir' });
     }
 
-    // Try MongoDB first
     try {
       await connectDB();
-      const admin = await Admin.findOne({ username: 'admin' });
-      if (admin && await bcrypt.compare(password, admin.password)) {
+      let admin = await Admin.findOne({ username: 'admin' });
+
+      if (admin) {
+        if (await bcrypt.compare(password, admin.password)) {
+          return res.json({ success: true });
+        }
+        return res.status(401).json({ error: 'Yanlış şifre' });
+      }
+
+      const envAdminPassword = process.env.ADMIN_PASSWORD;
+      if (envAdminPassword && password === envAdminPassword) {
+        const hashedPassword = await bcrypt.hash(password, 10);
+        admin = new Admin({ username: 'admin', password: hashedPassword });
+        await admin.save();
         return res.json({ success: true });
       }
+
+      return res.status(401).json({ error: 'Admin hesabı bulunamadı veya şifre yanlış' });
     } catch (dbError) {
-      console.log('MongoDB not available, using fallback');
+      console.error('Admin login DB error:', dbError);
+      return res.status(500).json({ error: 'MongoDB bağlantısı sağlanamadı' });
     }
-
-    // Fallback to hardcoded password if DB not available
-    const ADMIN_PASSWORD = '!HL!qy_yp&!2026i';
-    if (password === ADMIN_PASSWORD) {
-      return res.json({ success: true });
-    }
-
-    res.status(401).json({ error: 'Yanlış şifre' });
   } catch (err) {
     res.status(500).json({ error: 'Sunucu hatası' });
   }

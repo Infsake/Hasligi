@@ -1,5 +1,3 @@
-const ADMIN_PASSWORD = '!HL!qy_yp&!2026i'; // Fallback only
-
 async function fetchJson(url, fallbackUrl) {
     try {
         const response = await fetch(url);
@@ -122,16 +120,7 @@ document.getElementById('login-form').onsubmit = async (e) => {
             alert(data.error || 'Giriş başarısız.');
         }
     } catch (err) {
-        // Fallback to client-side check if server is down
-        if (password === ADMIN_PASSWORD) {
-            sessionStorage.setItem('hasleagueAdminAuth', 'true');
-            showAdminControls();
-            loadTeamOptions();
-            loadMatchOptions();
-            alert('Giriş başarılı (fallback). Admin paneline erişebilirsiniz.');
-        } else {
-            alert('Yanlış şifre. Tekrar deneyin.');
-        }
+        alert('Sunucu hatası: Admin girişi yapılamadı. Lütfen daha sonra tekrar deneyin.');
     }
 };
 
