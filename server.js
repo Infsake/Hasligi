@@ -9,7 +9,7 @@ require('dotenv').config();
 const { connectDB } = require('./api/db');
 const { Admin } = require('./api/models');
 const app = express();
-const PORT = 3000;
+const PORT = 3001;
 
 app.use(cors());
 app.use(express.json());
