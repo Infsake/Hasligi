@@ -4,8 +4,12 @@ const path = require('path');
 const cors = require('cors');
 const fileupload = require('express-fileupload');
 const sharp = require('sharp');
+const bcrypt = require('bcrypt');
+require('dotenv').config();
+const { connectDB } = require('./api/db');
+const { Admin } = require('./api/models');
 const app = express();
-const PORT = 3000;
+const PORT = 3001;
 
 app.use(cors());
 app.use(express.json());
@@ -215,6 +219,37 @@ app.get('/player', (req, res) => {
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+// Admin login endpoint
+app.post('/api/admin/login', async (req, res) => {
+  try {
+    const { password } = req.body;
+    if (!password) {
+      return res.status(400).json({ error: 'Şifre gereklidir' });
+    }
+
+    // Try MongoDB first
+    try {
+      await connectDB();
+      const admin = await Admin.findOne({ username: 'admin' });
+      if (admin && await bcrypt.compare(password, admin.password)) {
+        return res.json({ success: true });
+      }
+    } catch (dbError) {
+      console.log('MongoDB not available, using fallback');
+    }
+
+    // Fallback to hardcoded password if DB not available
+    const ADMIN_PASSWORD = '!HL!qy_yp&!2026i';
+    if (password === ADMIN_PASSWORD) {
+      return res.json({ success: true });
+    }
+
+    res.status(401).json({ error: 'Yanlış şifre' });
+  } catch (err) {
+    res.status(500).json({ error: 'Sunucu hatası' });
+  }
 });
 
 app.listen(PORT, () => {
