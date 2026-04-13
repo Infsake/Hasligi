@@ -1,4 +1,4 @@
-const ADMIN_PASSWORD = '!HL!qy_yp&!2026i'; // Fallback only
+const ADMIN_PASSWORD = '!HL!20_26&!a';
 
 async function fetchJson(url, fallbackUrl) {
     try {
@@ -97,41 +97,17 @@ function updateResultLabels() {
     label2.textContent = `${awayName} Skoru`;
 }
 
-document.getElementById('login-form').onsubmit = async (e) => {
+document.getElementById('login-form').onsubmit = (e) => {
     e.preventDefault();
     const password = document.getElementById('admin-password').value.trim();
-    
-    try {
-        const response = await fetch('/api/admin/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ password })
-        });
-        
-        const data = await response.json();
-        
-        if (data.success) {
-            sessionStorage.setItem('hasleagueAdminAuth', 'true');
-            showAdminControls();
-            loadTeamOptions();
-            loadMatchOptions();
-            alert('Giriş başarılı. Admin paneline erişebilirsiniz.');
-        } else {
-            alert(data.error || 'Giriş başarısız.');
-        }
-    } catch (err) {
-        // Fallback to client-side check if server is down
-        if (password === ADMIN_PASSWORD) {
-            sessionStorage.setItem('hasleagueAdminAuth', 'true');
-            showAdminControls();
-            loadTeamOptions();
-            loadMatchOptions();
-            alert('Giriş başarılı (fallback). Admin paneline erişebilirsiniz.');
-        } else {
-            alert('Yanlış şifre. Tekrar deneyin.');
-        }
+    if (password === ADMIN_PASSWORD) {
+        sessionStorage.setItem('hasleagueAdminAuth', 'true');
+        showAdminControls();
+        loadTeamOptions();
+        loadMatchOptions();
+        alert('Giriş başarılı. Admin paneline erişebilirsiniz.');
+    } else {
+        alert('Yanlış şifre. Tekrar deneyin.');
     }
 };
 

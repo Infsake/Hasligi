@@ -171,45 +171,8 @@ function loadNextMatch(teams, matches) {
     setInterval(updateCountdowns, 1000);
 }
 
-function comparePlayerStats(a, b) {
-    if (b.goals !== a.goals) return b.goals - a.goals;
-    if (b.assists !== a.assists) return b.assists - a.assists;
-    if (b.teamPoints !== a.teamPoints) return b.teamPoints - a.teamPoints;
-    if (b.teamGoals !== a.teamGoals) return b.teamGoals - a.teamGoals;
-    if (a.teamGoalsAgainst !== b.teamGoalsAgainst) return a.teamGoalsAgainst - b.teamGoalsAgainst;
-    return a.name.localeCompare(b.name);
-}
-
-function calculateTeamStats(teams, matches) {
-    const stats = {};
-    teams.forEach(team => {
-        stats[team.name] = { points: 0, gf: 0, ga: 0 };
-    });
-    matches.filter(match => match.status === 'past' && match.score).forEach(match => {
-        const [homeScore, awayScore] = match.score.split('-').map(Number);
-        if (!Number.isFinite(homeScore) || !Number.isFinite(awayScore)) return;
-        if (!stats[match.home] || !stats[match.away]) return;
-
-        stats[match.home].gf += homeScore;
-        stats[match.home].ga += awayScore;
-        stats[match.away].gf += awayScore;
-        stats[match.away].ga += homeScore;
-
-        if (homeScore > awayScore) {
-            stats[match.home].points += 3;
-        } else if (homeScore < awayScore) {
-            stats[match.away].points += 3;
-        } else {
-            stats[match.home].points += 1;
-            stats[match.away].points += 1;
-        }
-    });
-    return stats;
-}
-
 function loadTopPlayers(teams, matches) {
     const playerStats = {};
-    const teamStats = calculateTeamStats(teams, matches);
 
     teams.forEach(team => {
         if (team.players && Array.isArray(team.players)) {
@@ -223,10 +186,7 @@ function loadTopPlayers(teams, matches) {
                     playerIndex,
                     photo: typeof player === 'object' ? player.photo || '' : '',
                     goals: 0,
-                    assists: 0,
-                    teamPoints: teamStats[team.name]?.points || 0,
-                    teamGoals: teamStats[team.name]?.gf || 0,
-                    teamGoalsAgainst: teamStats[team.name]?.ga || 0
+                    assists: 0
                 };
             });
         }
@@ -240,7 +200,7 @@ function loadTopPlayers(teams, matches) {
     });
 
     const topPlayers = Object.values(playerStats)
-        .sort(comparePlayerStats)
+        .sort((a, b) => b.goals - a.goals || b.assists - a.assists)
         .slice(0, 3);
 
     const topPlayersEl = document.getElementById('top-players');

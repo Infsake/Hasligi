@@ -15,42 +15,6 @@ async function fetchJson(url, fallbackUrl) {
     }
 }
 
-function comparePlayerStats(a, b) {
-    if (b.goals !== a.goals) return b.goals - a.goals;
-    if (b.assists !== a.assists) return b.assists - a.assists;
-    if (b.teamPoints !== a.teamPoints) return b.teamPoints - a.teamPoints;
-    if (b.teamGoals !== a.teamGoals) return b.teamGoals - a.teamGoals;
-    if (a.teamGoalsAgainst !== b.teamGoalsAgainst) return a.teamGoalsAgainst - b.teamGoalsAgainst;
-    return a.name.localeCompare(b.name);
-}
-
-function calculateTeamStats(teams, matches) {
-    const stats = {};
-    teams.forEach(team => {
-        stats[team.name] = { points: 0, gf: 0, ga: 0 };
-    });
-    matches.filter(match => match.status === 'past' && match.score).forEach(match => {
-        const [homeScore, awayScore] = match.score.split('-').map(Number);
-        if (!Number.isFinite(homeScore) || !Number.isFinite(awayScore)) return;
-        if (!stats[match.home] || !stats[match.away]) return;
-
-        stats[match.home].gf += homeScore;
-        stats[match.home].ga += awayScore;
-        stats[match.away].gf += awayScore;
-        stats[match.away].ga += homeScore;
-
-        if (homeScore > awayScore) {
-            stats[match.home].points += 3;
-        } else if (homeScore < awayScore) {
-            stats[match.away].points += 3;
-        } else {
-            stats[match.home].points += 1;
-            stats[match.away].points += 1;
-        }
-    });
-    return stats;
-}
-
 async function loadPlayerDetails() {
     const [teams, matches] = await Promise.all([
         fetchJson('/api/teams', '/teams.json'),
@@ -97,23 +61,12 @@ async function loadPlayerDetails() {
     document.getElementById('total-assists').textContent = totalAssists;
 
     // Gol krallığı sıralaması
-    const teamStats = calculateTeamStats(teams, matches);
     const playerStats = {};
     teams.forEach(t => {
-        if (t.players && Array.isArray(t.players)) {
+        if (t.players) {
             t.players.forEach(p => {
                 const name = typeof p === 'string' ? p : p.name;
-                if (!playerStats[name]) {
-                    playerStats[name] = {
-                        name,
-                        team: t.name,
-                        goals: 0,
-                        assists: 0,
-                        teamPoints: teamStats[t.name]?.points || 0,
-                        teamGoals: teamStats[t.name]?.gf || 0,
-                        teamGoalsAgainst: teamStats[t.name]?.ga || 0
-                    };
-                }
+                if (!playerStats[name]) playerStats[name] = { goals: 0 };
             });
         }
     });
@@ -122,17 +75,14 @@ async function loadPlayerDetails() {
         if (match.goals) {
             match.goals.forEach(goal => {
                 if (playerStats[goal.scorer]) playerStats[goal.scorer].goals++;
-                if (playerStats[goal.assister]) playerStats[goal.assister].assists++;
             });
         }
     });
 
-    const sortedPlayers = Object.values(playerStats).sort(comparePlayerStats);
-    sortedPlayers.forEach((current, index) => {
-        current.rank = index === 0 ? 1 : comparePlayerStats(current, sortedPlayers[index - 1]) === 0 ? sortedPlayers[index - 1].rank : index + 1;
-    });
+    const sortedPlayers = Object.entries(playerStats)
+        .sort((a, b) => b[1].goals - a[1].goals);
 
-    const ranking = sortedPlayers.find(player => player.name === playerName)?.rank;
+    const ranking = sortedPlayers.findIndex(([name]) => name === playerName) + 1;
     document.getElementById('goals-ranking').textContent = ranking || 'Sıralama dışı';
 
     const playerCard = document.querySelector('.player-card');
