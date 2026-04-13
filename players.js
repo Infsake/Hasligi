@@ -67,7 +67,7 @@ async function loadPlayers() {
 
     sortPlayers(players);
     players.forEach((player, index) => {
-        player.rank = index === 0 ? 1 : comparePlayerRanking(player, players[index - 1]) === 0 ? players[index - 1].rank : index + 1;
+        player.rank = index === 0 ? 1 : comparePlayerStats(player, players[index - 1]) === 0 ? players[index - 1].rank : index + 1;
     });
 
     const tbody = document.getElementById('players-body');
@@ -99,7 +99,7 @@ async function loadPlayers() {
     }
 }
 
-function comparePlayerRanking(a, b) {
+function comparePlayerStats(a, b) {
     if (currentSort === 'gol') {
         if (b.goals !== a.goals) return b.goals - a.goals;
         if (b.assists !== a.assists) return b.assists - a.assists;
@@ -112,12 +112,7 @@ function comparePlayerRanking(a, b) {
     if (b.teamPoints !== a.teamPoints) return b.teamPoints - a.teamPoints;
     if (b.teamGoals !== a.teamGoals) return b.teamGoals - a.teamGoals;
     if (a.teamGoalsAgainst !== b.teamGoalsAgainst) return a.teamGoalsAgainst - b.teamGoalsAgainst;
-    return 0;
-}
-
-function comparePlayerStats(a, b) {
-    const diff = comparePlayerRanking(a, b);
-    return diff || a.name.localeCompare(b.name);
+    return a.name.localeCompare(b.name);
 }
 
 function sortPlayers(players) {

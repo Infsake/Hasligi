@@ -171,18 +171,13 @@ function loadNextMatch(teams, matches) {
     setInterval(updateCountdowns, 1000);
 }
 
-function comparePlayerRanking(a, b) {
+function comparePlayerStats(a, b) {
     if (b.goals !== a.goals) return b.goals - a.goals;
     if (b.assists !== a.assists) return b.assists - a.assists;
     if (b.teamPoints !== a.teamPoints) return b.teamPoints - a.teamPoints;
     if (b.teamGoals !== a.teamGoals) return b.teamGoals - a.teamGoals;
     if (a.teamGoalsAgainst !== b.teamGoalsAgainst) return a.teamGoalsAgainst - b.teamGoalsAgainst;
-    return 0;
-}
-
-function comparePlayerStats(a, b) {
-    const diff = comparePlayerRanking(a, b);
-    return diff || a.name.localeCompare(b.name);
+    return a.name.localeCompare(b.name);
 }
 
 function calculateTeamStats(teams, matches) {
@@ -245,11 +240,8 @@ function loadTopPlayers(teams, matches) {
     });
 
     const topPlayers = Object.values(playerStats)
-        .sort(comparePlayerStats);
-
-    topPlayers.forEach((player, index) => {
-        player.rank = index === 0 ? 1 : comparePlayerRanking(player, topPlayers[index - 1]) === 0 ? topPlayers[index - 1].rank : index + 1;
-    });
+        .sort(comparePlayerStats)
+        .slice(0, 3);
 
     const topPlayersEl = document.getElementById('top-players');
     topPlayersEl.innerHTML = '';
@@ -259,12 +251,12 @@ function loadTopPlayers(teams, matches) {
         return;
     }
 
-    topPlayers.slice(0, 3).forEach((player, index) => {
+    topPlayers.forEach((player, index) => {
         const card = document.createElement('a');
         card.href = `./player.html?team=${encodeURIComponent(player.teamId)}&index=${player.playerIndex}`;
-        card.className = `top-player-card ${player.rank === 1 ? 'gold' : player.rank === 2 ? 'silver' : player.rank === 3 ? 'bronze' : ''}`;
+        card.className = `top-player-card ${index === 0 ? 'gold' : index === 1 ? 'silver' : 'bronze'}`;
         card.innerHTML = `
-            <div class="top-player-rank">#${player.rank}</div>
+            <div class="top-player-rank">#${index + 1}</div>
             <div class="top-player-meta">
                 <div class="top-player-photo">
                     <img src="${player.photo || normalizeLogoPath(player.logo)}" alt="${player.name}">

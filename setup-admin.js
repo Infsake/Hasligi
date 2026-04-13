@@ -8,7 +8,7 @@ async function setupAdmin() {
     await connectDB();
     console.log('Connected to MongoDB');
 
-    const adminPassword = process.env.ADMIN_PASSWORD || '!HL!qy_yp&!2026i';
+    const adminPassword = '!HL!qy_yp&!2026i'; // Current password
     const hashedPassword = await bcrypt.hash(adminPassword, 10);
 
     const admin = new Admin({

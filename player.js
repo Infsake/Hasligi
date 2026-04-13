@@ -15,18 +15,13 @@ async function fetchJson(url, fallbackUrl) {
     }
 }
 
-function comparePlayerRanking(a, b) {
+function comparePlayerStats(a, b) {
     if (b.goals !== a.goals) return b.goals - a.goals;
     if (b.assists !== a.assists) return b.assists - a.assists;
     if (b.teamPoints !== a.teamPoints) return b.teamPoints - a.teamPoints;
     if (b.teamGoals !== a.teamGoals) return b.teamGoals - a.teamGoals;
     if (a.teamGoalsAgainst !== b.teamGoalsAgainst) return a.teamGoalsAgainst - b.teamGoalsAgainst;
-    return 0;
-}
-
-function comparePlayerStats(a, b) {
-    const diff = comparePlayerRanking(a, b);
-    return diff || a.name.localeCompare(b.name);
+    return a.name.localeCompare(b.name);
 }
 
 function calculateTeamStats(teams, matches) {
@@ -134,7 +129,7 @@ async function loadPlayerDetails() {
 
     const sortedPlayers = Object.values(playerStats).sort(comparePlayerStats);
     sortedPlayers.forEach((current, index) => {
-        current.rank = index === 0 ? 1 : comparePlayerRanking(current, sortedPlayers[index - 1]) === 0 ? sortedPlayers[index - 1].rank : index + 1;
+        current.rank = index === 0 ? 1 : comparePlayerStats(current, sortedPlayers[index - 1]) === 0 ? sortedPlayers[index - 1].rank : index + 1;
     });
 
     const ranking = sortedPlayers.find(player => player.name === playerName)?.rank;
