@@ -251,10 +251,44 @@ app.post('/api/admin/login', async (req, res) => {
       return res.status(401).json({ error: 'Admin hesabı bulunamadı veya şifre yanlış' });
     } catch (dbError) {
       console.error('Admin login DB error:', dbError);
-      return res.status(500).json({ error: 'MongoDB bağlantısı sağlanamadı' });
+      return res.status(500).json({ error: 'MongoDB bağlantısı sağlanamadı: ' + dbError.message });
     }
   } catch (err) {
-    res.status(500).json({ error: 'Sunucu hatası' });
+    console.error('Admin login error:', err);
+    res.status(500).json({ error: 'Sunucu hatası: ' + err.message });
+  }
+});
+
+// Test endpoint for debugging
+app.get('/api/test', async (req, res) => {
+  try {
+    const mongoUri = process.env.MONGO_URI;
+    const adminPwd = process.env.ADMIN_PASSWORD;
+    
+    const result = {
+      mongoUriSet: !!mongoUri,
+      adminPwdSet: !!adminPwd,
+      mongoUriPrefix: mongoUri ? mongoUri.substring(0, 20) + '...' : null,
+      timestamp: new Date().toISOString()
+    };
+
+    // Test MongoDB connection
+    try {
+      await connectDB();
+      result.mongoConnected = true;
+      
+      // Check if admin exists
+      const admin = await Admin.findOne({ username: 'admin' });
+      result.adminExists = !!admin;
+      
+    } catch (dbError) {
+      result.mongoConnected = false;
+      result.dbError = dbError.message;
+    }
+
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 });
 
