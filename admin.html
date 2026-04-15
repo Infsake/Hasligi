@@ -51,6 +51,7 @@
                     <button class="tab-button" data-tab="player-tab">Takıma Oyuncu Ekle</button>
                     <button class="tab-button" data-tab="edit-player-tab">Takımdaki Oyuncuyu Ayarla</button>
                     <button class="tab-button" data-tab="schedule-tab">Maç Takvimi Ayarla</button>
+                    <button class="tab-button" data-tab="edit-match-tab">Maç Düzenle</button>
                     <button class="tab-button" data-tab="result-tab">Maç Sonucu Gir</button>
                 </div>
 
@@ -141,6 +142,30 @@
                         <label for="match-place">Yer</label>
                         <input type="text" id="match-place" name="place" placeholder="Stadyum / Saha" required>
                         <button type="submit">Maçı Kaydet</button>
+                    </form>
+                </div>
+
+                <div id="edit-match-tab" class="admin-tab-content admin-card hidden">
+                    <h2>Maç Düzenle</h2>
+                    <form id="edit-match-form" class="admin-form">
+                        <label for="edit-match-select">Maç Seç</label>
+                        <select id="edit-match-select" name="match" required>
+                            <option value="" disabled selected>Maç seç</option>
+                        </select>
+                        <p id="edit-match-teams" class="admin-note"></p>
+                        <label for="edit-match-date">Tarih</label>
+                        <input type="date" id="edit-match-date" name="date" required>
+                        <label for="edit-match-time">Saat</label>
+                        <input type="time" id="edit-match-time" name="time" required>
+                        <label for="edit-match-place">Yer</label>
+                        <input type="text" id="edit-match-place" name="place" placeholder="Stadyum / Saha" required>
+                        <label for="edit-match-score1">Takım 1 Skoru</label>
+                        <input type="number" id="edit-match-score1" name="score1" min="0" placeholder="0">
+                        <label for="edit-match-score2">Takım 2 Skoru</label>
+                        <input type="number" id="edit-match-score2" name="score2" min="0" placeholder="0">
+                        <label for="edit-match-link">Maç Linki</label>
+                        <input type="url" id="edit-match-link" name="link" placeholder="https://">
+                        <button type="submit">Maçı Güncelle</button>
                     </form>
                 </div>
 

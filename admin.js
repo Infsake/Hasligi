@@ -11,6 +11,8 @@ async function fetchJson(url, fallbackUrl) {
     }
 }
 
+let matchCache = [];
+
 async function loginAdmin(password) {
     const tryFetch = async (url) => {
         const response = await fetch(url, {
@@ -100,6 +102,7 @@ async function loadTeamOptions() {
 
 async function loadMatchOptions() {
     const matches = await fetchJson('/api/matches', '/matches.json');
+    matchCache = matches;
     const matchSelect = document.getElementById('match-select');
     matchSelect.innerHTML = '<option value="" disabled selected>Maç seç</option>';
     matches.filter(match => match.status !== 'past').forEach(match => {
@@ -112,6 +115,31 @@ async function loadMatchOptions() {
         matchSelect.appendChild(option);
     });
     updateResultLabels();
+    await loadMatchEditOptions();
+}
+
+async function loadMatchEditOptions() {
+    if (!matchCache.length) {
+        matchCache = await fetchJson('/api/matches', '/matches.json');
+    }
+
+    const editMatchSelect = document.getElementById('edit-match-select');
+    editMatchSelect.innerHTML = '<option value="" disabled selected>Maç seç</option>';
+
+    matchCache.forEach(match => {
+        const option = document.createElement('option');
+        option.value = match.id;
+        const timeText = match.time ? ` ${match.time}` : '';
+        option.textContent = `${match.date}${timeText} • ${match.home} vs ${match.away} ${match.status ? `(${match.status})` : ''}`;
+        option.dataset.home = match.home;
+        option.dataset.away = match.away;
+        option.dataset.date = match.date;
+        option.dataset.time = match.time;
+        option.dataset.place = match.place || '';
+        option.dataset.score = match.score || '';
+        option.dataset.link = match.link || '';
+        editMatchSelect.appendChild(option);
+    });
 }
 
 function updateResultLabels() {
@@ -164,6 +192,57 @@ document.getElementById('match-select').addEventListener('change', updateResultL
 
 document.getElementById('score1').addEventListener('input', updateGoalDetails);
 document.getElementById('score2').addEventListener('input', updateGoalDetails);
+
+document.getElementById('edit-match-select').addEventListener('change', (e) => {
+    const selectedOption = e.target.options[e.target.selectedIndex];
+    const homeName = selectedOption.dataset.home || 'Takım 1';
+    const awayName = selectedOption.dataset.away || 'Takım 2';
+    document.getElementById('edit-match-teams').textContent = `${homeName} vs ${awayName}`;
+    document.getElementById('edit-match-date').value = selectedOption.dataset.date || '';
+    document.getElementById('edit-match-time').value = selectedOption.dataset.time || '';
+    document.getElementById('edit-match-place').value = selectedOption.dataset.place || '';
+    const score = selectedOption.dataset.score || '';
+    const [score1, score2] = score.split('-');
+    document.getElementById('edit-match-score1').value = !isNaN(parseInt(score1)) ? parseInt(score1) : '';
+    document.getElementById('edit-match-score2').value = !isNaN(parseInt(score2)) ? parseInt(score2) : '';
+    document.getElementById('edit-match-link').value = selectedOption.dataset.link || '';
+});
+
+document.getElementById('edit-match-form').onsubmit = async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const matchId = form.match.value;
+    const date = form.date.value;
+    const time = form.time.value;
+    const place = form.place.value;
+    const link = form.link.value || null;
+    const score1 = form.score1.value;
+    const score2 = form.score2.value;
+    const body = { date, time, place, link };
+
+    if (score1 !== '' && score2 !== '') {
+        body.score = `${parseInt(score1, 10)}-${parseInt(score2, 10)}`;
+        body.status = 'past';
+    }
+
+    try {
+        const response = await fetch(`/api/matches/${matchId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        });
+        if (response.ok) {
+            alert('Maç başarıyla güncellendi!');
+            form.reset();
+            document.getElementById('edit-match-teams').textContent = '';
+            loadMatchOptions();
+        } else {
+            alert('Hata: ' + await response.text());
+        }
+    } catch (error) {
+        alert('Bağlantı hatası: ' + error.message);
+    }
+});
 
 // Edit player functionality
 document.getElementById('edit-player-team').addEventListener('change', async (e) => {

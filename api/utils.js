@@ -884,12 +884,24 @@ const matchesData = [
 ];
 
 async function readJsonFile(filename) {
-  if (filename === 'teams.json') {
-    return teamsData;
-  } else if (filename === 'matches.json') {
-    return matchesData;
+  const filePath = path.join(process.cwd(), filename);
+  try {
+    const fileData = await fs.readFile(filePath, 'utf8');
+    return JSON.parse(fileData);
+  } catch (error) {
+    if (filename === 'teams.json') {
+      return teamsData;
+    } else if (filename === 'matches.json') {
+      return matchesData;
+    }
+    throw error;
   }
-  throw new Error('Unknown file');
+}
+
+async function writeJsonFile(filename, data) {
+  const filePath = path.join(process.cwd(), filename);
+  await fs.writeFile(filePath, JSON.stringify(data, null, 2), 'utf8');
+  return data;
 }
 
 async function seedTeamsIfEmpty() {
@@ -910,6 +922,7 @@ async function seedMatchesIfEmpty() {
 
 module.exports = {
   readJsonFile,
+  writeJsonFile,
   seedTeamsIfEmpty,
   seedMatchesIfEmpty
 };

@@ -1,7 +1,7 @@
 const db = require('../db');
 const { connectDB, hasMongoURI } = db;
 const { Match } = require('../models');
-const { seedMatchesIfEmpty, readJsonFile } = require('../utils');
+const { seedMatchesIfEmpty, readJsonFile, writeJsonFile } = require('../utils');
 
 module.exports = async (req, res) => {
   try {
@@ -31,6 +31,27 @@ module.exports = async (req, res) => {
       if (!home || !away || !date) {
         return res.status(400).json({ error: 'home, away ve date alanları gerekli' });
       }
+
+      if (!hasMongoURI) {
+        const matches = await readJsonFile('matches.json');
+        const id = `match${matches.length + 1}`;
+        const newMatch = {
+          id,
+          home,
+          away,
+          date,
+          time,
+          place,
+          link: link || null,
+          status: 'future',
+          score: null,
+          goals: []
+        };
+        matches.push(newMatch);
+        await writeJsonFile('matches.json', matches);
+        return res.status(201).json(newMatch);
+      }
+
       await connectDB();
       await seedMatchesIfEmpty();
       const count = await Match.countDocuments();
