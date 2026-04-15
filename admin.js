@@ -138,6 +138,7 @@ async function loadMatchEditOptions() {
         option.dataset.place = match.place || '';
         option.dataset.score = match.score || '';
         option.dataset.link = match.link || '';
+        option.dataset.goals = JSON.stringify(match.goals || []);
         editMatchSelect.appendChild(option);
     });
 }
@@ -200,6 +201,9 @@ document.getElementById('match-select').addEventListener('change', updateResultL
 document.getElementById('score1').addEventListener('input', updateGoalDetails);
 document.getElementById('score2').addEventListener('input', updateGoalDetails);
 
+document.getElementById('edit-match-score1').addEventListener('input', updateEditGoalDetails);
+document.getElementById('edit-match-score2').addEventListener('input', updateEditGoalDetails);
+
 document.getElementById('edit-match-select').addEventListener('change', (e) => {
     const selectedOption = e.target.options[e.target.selectedIndex];
     const homeName = selectedOption.dataset.home || 'Takım 1';
@@ -213,6 +217,7 @@ document.getElementById('edit-match-select').addEventListener('change', (e) => {
     document.getElementById('edit-match-score1').value = !isNaN(parseInt(score1)) ? parseInt(score1) : '';
     document.getElementById('edit-match-score2').value = !isNaN(parseInt(score2)) ? parseInt(score2) : '';
     document.getElementById('edit-match-link').value = selectedOption.dataset.link || '';
+    updateEditGoalDetails();
 });
 
 document.getElementById('edit-match-form').onsubmit = async (e) => {
@@ -228,8 +233,28 @@ document.getElementById('edit-match-form').onsubmit = async (e) => {
     const body = { date, time, place, link };
 
     if (score1 !== '' && score2 !== '') {
-        body.score = `${parseInt(score1, 10)}-${parseInt(score2, 10)}`;
+        const parsedScore1 = parseInt(score1, 10);
+        const parsedScore2 = parseInt(score2, 10);
+        body.score = `${parsedScore1}-${parsedScore2}`;
         body.status = 'past';
+
+        const goals = [];
+        const totalGoals = parsedScore1 + parsedScore2;
+
+        for (let i = 0; i < totalGoals; i++) {
+            const scorer = form[`scorer-${i}`]?.value;
+            const assister = form[`assister-${i}`]?.value || null;
+            const hasMinute = form[`has-minute-${i}`]?.checked;
+            const minute = hasMinute ? parseInt(form[`minute-${i}`]?.value, 10) : null;
+            const isHomeGoal = i < parsedScore1;
+            const team = isHomeGoal ? 'home' : 'away';
+
+            if (scorer) {
+                goals.push({ team, scorer, assister, minute });
+            }
+        }
+
+        body.goals = goals;
     }
 
     try {
@@ -389,6 +414,95 @@ function updateGoalDetails() {
     } else {
         document.getElementById('goal-details').classList.add('hidden');
     }
+}
+
+async function renderGoalDetailsForMatch(panelId, containerId, homeTeam, awayTeam, score1, score2, existingGoals = []) {
+    const panel = document.getElementById(panelId);
+    const container = document.getElementById(containerId);
+    container.innerHTML = '';
+
+    const totalGoals = score1 + score2;
+    if (totalGoals <= 0) {
+        panel.classList.add('hidden');
+        return;
+    }
+
+    panel.classList.remove('hidden');
+    const teams = await fetchJson('/api/teams', '/teams.json');
+    const homePlayers = teams.find(t => t.name === homeTeam)?.players || [];
+    const awayPlayers = teams.find(t => t.name === awayTeam)?.players || [];
+
+    for (let i = 0; i < totalGoals; i++) {
+        const isHomeGoal = i < score1;
+        const teamName = isHomeGoal ? homeTeam : awayTeam;
+        const players = isHomeGoal ? homePlayers : awayPlayers;
+        const existingGoal = existingGoals[i] || {};
+        const minuteValue = existingGoal.minute || '';
+        const showMinute = typeof existingGoal.minute === 'number';
+
+        const goalDiv = document.createElement('div');
+        goalDiv.className = 'goal-item';
+        goalDiv.innerHTML = `
+            <h4>${teamName} Takımının ${isHomeGoal ? (i + 1) : (i - score1 + 1)}. Golü</h4>
+            <label>Golü Atan Oyuncu</label>
+            <select name="scorer-${i}" required>
+                <option value="">Seç</option>
+                ${players.map(p => {
+                    const value = typeof p === 'string' ? p : p.name;
+                    const selected = existingGoal.scorer === value ? 'selected' : '';
+                    return `<option value="${value}" ${selected}>${value}</option>`;
+                }).join('')}
+            </select>
+            <label>Asist Yapan Oyuncu</label>
+            <select name="assister-${i}">
+                <option value="">Yok</option>
+                ${players.map(p => {
+                    const value = typeof p === 'string' ? p : p.name;
+                    const selected = existingGoal.assister === value ? 'selected' : '';
+                    return `<option value="${value}" ${selected}>${value}</option>`;
+                }).join('')}
+            </select>
+            <label>
+                <input type="checkbox" name="has-minute-${i}" ${showMinute ? 'checked' : ''}> Dakikası var mı?
+            </label>
+            <input type="number" name="minute-${i}" min="1" max="120" placeholder="Dakika" value="${minuteValue}" style="display: ${showMinute ? 'block' : 'none'};" ${showMinute ? 'required' : ''}>
+        `;
+
+        const checkbox = goalDiv.querySelector(`input[name="has-minute-${i}"]`);
+        const minuteInput = goalDiv.querySelector(`input[name="minute-${i}"]`);
+        checkbox.addEventListener('change', () => {
+            minuteInput.style.display = checkbox.checked ? 'block' : 'none';
+            minuteInput.required = checkbox.checked;
+        });
+
+        container.appendChild(goalDiv);
+    }
+}
+
+function updateEditGoalDetails() {
+    const matchSelect = document.getElementById('edit-match-select');
+    const selectedOption = matchSelect.options[matchSelect.selectedIndex];
+    if (!selectedOption || !selectedOption.value) {
+        document.getElementById('edit-goal-details').classList.add('hidden');
+        document.getElementById('edit-goals-container').innerHTML = '';
+        return;
+    }
+
+    const score1 = parseInt(document.getElementById('edit-match-score1').value, 10);
+    const score2 = parseInt(document.getElementById('edit-match-score2').value, 10);
+    const parsedScore1 = Number.isNaN(score1) ? 0 : score1;
+    const parsedScore2 = Number.isNaN(score2) ? 0 : score2;
+    const homeTeam = selectedOption.dataset.home;
+    const awayTeam = selectedOption.dataset.away;
+    let existingGoals = [];
+
+    try {
+        existingGoals = JSON.parse(selectedOption.dataset.goals || '[]');
+    } catch (error) {
+        existingGoals = [];
+    }
+
+    renderGoalDetailsForMatch('edit-goal-details', 'edit-goals-container', homeTeam, awayTeam, parsedScore1, parsedScore2, existingGoals);
 }
 
 document.getElementById('team-form').onsubmit = async (e) => {
