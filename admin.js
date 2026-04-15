@@ -119,8 +119,8 @@ document.getElementById('login-form').onsubmit = async (e) => {
         loadMatchOptions();
         alert('Giriş başarılı. Admin paneline erişebilirsiniz.');
     } catch (error) {
-        console.error(error);
-        alert('Yanlış şifre. Tekrar deneyin.');
+        console.error('Admin login failed:', error);
+        alert(error.message || 'Sunucuya bağlanılamıyor. Lütfen serverı başlatın.');
     }
 };
 
