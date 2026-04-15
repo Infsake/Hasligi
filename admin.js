@@ -160,7 +160,14 @@ function updateResultLabels() {
 
 document.getElementById('login-form').onsubmit = async (e) => {
     e.preventDefault();
-    const password = document.getElementById('admin-password').value.trim();
+    const passwordInput = document.getElementById('admin-password');
+    const password = passwordInput ? passwordInput.value.trim() : '';
+
+    if (!password) {
+        alert('Lütfen şifrenizi girin.');
+        return;
+    }
+
     try {
         await loginAdmin(password);
         sessionStorage.setItem('hasleagueAdminAuth', 'true');
