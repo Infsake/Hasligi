@@ -1,5 +1,3 @@
-const ADMIN_PASSWORD = '!HL!20_26&!a';
-
 async function fetchJson(url, fallbackUrl) {
     try {
         const response = await fetch(url);
@@ -11,6 +9,19 @@ async function fetchJson(url, fallbackUrl) {
         if (!fallbackResponse.ok) throw err;
         return await fallbackResponse.json();
     }
+}
+
+async function loginAdmin(password) {
+    const response = await fetch('/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password })
+    });
+    if (!response.ok) {
+        const errorData = await response.json().catch(() => null);
+        throw new Error(errorData?.error || 'Giriş yapılamadı');
+    }
+    return await response.json();
 }
 
 function showAdminControls() {
@@ -97,16 +108,18 @@ function updateResultLabels() {
     label2.textContent = `${awayName} Skoru`;
 }
 
-document.getElementById('login-form').onsubmit = (e) => {
+document.getElementById('login-form').onsubmit = async (e) => {
     e.preventDefault();
     const password = document.getElementById('admin-password').value.trim();
-    if (password === ADMIN_PASSWORD) {
+    try {
+        await loginAdmin(password);
         sessionStorage.setItem('hasleagueAdminAuth', 'true');
         showAdminControls();
         loadTeamOptions();
         loadMatchOptions();
         alert('Giriş başarılı. Admin paneline erişebilirsiniz.');
-    } else {
+    } catch (error) {
+        console.error(error);
         alert('Yanlış şifre. Tekrar deneyin.');
     }
 };

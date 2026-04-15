@@ -24,11 +24,17 @@ const matchSchema = new mongoose.Schema({
   goals: [Mixed]
 }, { timestamps: true, strict: false });
 
+const adminSchema = new mongoose.Schema({
+  username: { type: String, required: true, unique: true },
+  password: { type: String, required: true }
+}, { timestamps: true, strict: false });
+
 function getModel(name, schema) {
   return mongoose.models[name] || mongoose.model(name, schema);
 }
 
 module.exports = {
   Team: getModel('Team', teamSchema),
-  Match: getModel('Match', matchSchema)
+  Match: getModel('Match', matchSchema),
+  Admin: getModel('Admin', adminSchema)
 };
