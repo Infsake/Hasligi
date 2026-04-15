@@ -12,16 +12,31 @@ async function fetchJson(url, fallbackUrl) {
 }
 
 async function loginAdmin(password) {
-    const response = await fetch('/api/admin/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password })
-    });
-    if (!response.ok) {
-        const errorData = await response.json().catch(() => null);
-        throw new Error(errorData?.error || 'Giriş yapılamadı');
+    try {
+        const response = await fetch('/api/admin/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ password })
+        });
+
+        if (!response.ok) {
+            let errorMessage = `HTTP ${response.status}: `;
+            try {
+                const errorData = await response.json();
+                errorMessage += errorData?.error || 'Bilinmeyen hata';
+            } catch (jsonError) {
+                errorMessage += 'Sunucu yanıtı parse edilemedi';
+            }
+            throw new Error(errorMessage);
+        }
+
+        return await response.json();
+    } catch (networkError) {
+        if (networkError.message.includes('HTTP')) {
+            throw networkError; // Already detailed
+        }
+        throw new Error(`Bağlantı hatası: ${networkError.message}`);
     }
-    return await response.json();
 }
 
 function showAdminControls() {
