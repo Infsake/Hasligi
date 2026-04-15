@@ -12,16 +12,22 @@ async function fetchJson(url, fallbackUrl) {
 }
 
 async function loginAdmin(password) {
+    console.log('Attempting login with password:', password);
     const response = await fetch('/api/admin/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ password })
     });
+    console.log('Response status:', response.status);
+    console.log('Response ok:', response.ok);
     if (!response.ok) {
         const errorData = await response.json().catch(() => null);
+        console.log('Error data:', errorData);
         throw new Error(errorData?.error || 'Giriş yapılamadı');
     }
-    return await response.json();
+    const result = await response.json();
+    console.log('Login result:', result);
+    return result;
 }
 
 function showAdminControls() {
