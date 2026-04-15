@@ -249,7 +249,7 @@ document.getElementById('edit-match-form').onsubmit = async (e) => {
     } catch (error) {
         alert('Bağlantı hatası: ' + error.message);
     }
-});
+};
 
 // Edit player functionality
 document.getElementById('edit-player-team').addEventListener('change', async (e) => {
