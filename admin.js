@@ -18,34 +18,32 @@ async function loginAdmin(password) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ password })
         });
-        if (!response.ok) {
-            let errorMessage = `HTTP ${response.status}: `;
-            try {
-                const errorData = await response.json();
-                errorMessage += errorData?.error || 'Bilinmeyen hata';
-            } catch (jsonError) {
-                const text = await response.text().catch(() => 'Yanıt okunamadı');
-                errorMessage += `Sunucu yanıtı parse edilemedi: ${text}`;
-            }
-            throw new Error(errorMessage);
+
+        let data = null;
+        const contentType = response.headers.get('content-type') || '';
+        if (contentType.includes('application/json')) {
+            data = await response.json().catch(() => null);
+        } else {
+            data = await response.text().catch(() => null);
         }
-        return await response.json();
+
+        return { ok: response.ok, status: response.status, url, data };
     };
 
-    try {
-        try {
-            return await tryFetch('/api/admin/login');
-        } catch (firstError) {
-            if (firstError.message.startsWith('HTTP 404')) {
-                return await tryFetch('/api/admin-login');
-            }
-            throw firstError;
-        }
-    } catch (networkError) {
-        if (networkError.message.includes('HTTP')) {
-            throw networkError;
-        throw new Error(`Bağlantı hatası: ${networkError.message}`);
+    const firstResponse = await tryFetch('/api/admin/login');
+    if (firstResponse.ok) {
+        return firstResponse.data;
     }
+
+    if (firstResponse.status === 404) {
+        const secondResponse = await tryFetch('/api/admin-login');
+        if (secondResponse.ok) {
+            return secondResponse.data;
+        }
+        throw new Error(`HTTP ${secondResponse.status} (${secondResponse.url}): ${secondResponse.data?.error || secondResponse.data || 'Bilinmeyen hata'}`);
+    }
+
+    throw new Error(`HTTP ${firstResponse.status} (${firstResponse.url}): ${firstResponse.data?.error || firstResponse.data || 'Bilinmeyen hata'}`);
 }
 
 function showAdminControls() {
