@@ -244,12 +244,18 @@ app.post('/api/admin/login', async (req, res) => {
     }
 
     if (!authSuccess) {
+      // Check db/admin.json for plain text password
       const adminConfigPath = path.join(__dirname, 'db', 'admin.json');
-      if (fs.existsSync(adminConfigPath)) {
-        const adminConfig = JSON.parse(fs.readFileSync(adminConfigPath, 'utf8'));
-        if (adminConfig.passwordHash) {
-          authSuccess = await bcrypt.compare(password, adminConfig.passwordHash);
+      try {
+        if (fs.existsSync(adminConfigPath)) {
+          const adminConfig = JSON.parse(fs.readFileSync(adminConfigPath, 'utf8'));
+          if (adminConfig.password && password === adminConfig.password) {
+            authSuccess = true;
+          }
         }
+      } catch (fileError) {
+        console.error('File read error:', fileError);
+        return res.status(500).json({ error: 'Dosya okuma hatası' });
       }
     }
 
