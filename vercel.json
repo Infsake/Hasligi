@@ -1,0 +1,26 @@
+{
+  "version": 2,
+  "builds": [
+    { "src": "api/**/*.js", "use": "@vercel/node" },
+    { "src": "*.html", "use": "@vercel/static" },
+    { "src": "*.js", "use": "@vercel/static" },
+    { "src": "*.json", "use": "@vercel/static" },
+    { "src": "styles.css", "use": "@vercel/static" },
+    { "src": "img/**/*", "use": "@vercel/static" }
+  ],
+  "routes": [
+    { "src": "^/api/teams/([^/]+)/players/([^/]+)$", "dest": "/api/teams/[id]/players/[index].js" },
+    { "src": "^/api/teams/([^/]+)/players$", "dest": "/api/teams/[id]/players/index.js" },
+    { "src": "^/api/matches/([^/]+)$", "dest": "/api/matches/[id].js" },
+    { "src": "^/api/admin-login$", "dest": "/api/admin/login.js" },
+    { "src": "^/api/admin/login$", "dest": "/api/admin/login.js" },
+    { "src": "^/api/(.*)$", "dest": "/api/$1" },
+    { "handle": "filesystem" },
+    { "src": "^/team/([^/]+)$", "dest": "/team.html" },
+    { "src": "^/admin$", "dest": "/admin.html" },
+    { "src": "^/player$", "dest": "/player.html" },
+    { "src": "^/players$", "dest": "/players.html" },
+    { "src": "^/league$", "dest": "/league.html" },
+    { "src": "^/$", "dest": "/index.html" }
+  ]
+}
