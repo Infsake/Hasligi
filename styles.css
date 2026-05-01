@@ -985,7 +985,7 @@ body {
     }
 
     .match-card .goals {
-        margin-top: auto;
+        margin: auto;
         text-align: center;
     }
 
