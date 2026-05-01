@@ -246,17 +246,26 @@ document.getElementById('edit-match-form').onsubmit = async (e) => {
 
         const goals = [];
         const totalGoals = parsedScore1 + parsedScore2;
+        const formData = new FormData(form);
 
         for (let i = 0; i < totalGoals; i++) {
-            const scorer = getRecordedGoalName(new FormData(form), `scorer-${i}`);
-            const assister = getRecordedGoalName(new FormData(form), `assister-${i}`) || null;
+            const scorerData = getRecordedGoalData(formData, `scorer-${i}`);
+            const assisterData = getRecordedGoalData(formData, `assister-${i}`);
             const hasMinute = form[`has-minute-${i}`]?.checked;
             const minute = hasMinute ? parseInt(form[`minute-${i}`]?.value, 10) : null;
             const isHomeGoal = i < parsedScore1;
             const team = isHomeGoal ? 'home' : 'away';
 
-            if (scorer) {
-                goals.push({ team, scorer, assister, minute });
+            if (scorerData && scorerData.name) {
+                goals.push({
+                    team,
+                    scorer: scorerData.name,
+                    scorerLoan: scorerData.loan,
+                    ownGoal: scorerData.ownGoal,
+                    assister: assisterData ? assisterData.name : null,
+                    assisterLoan: assisterData ? assisterData.loan : false,
+                    minute
+                });
             }
         }
 
@@ -364,16 +373,37 @@ document.getElementById('edit-player-form').onsubmit = async (e) => {
     }
 };
 
-function getRecordedGoalName(formData, key) {
+function getRecordedGoalData(formData, key) {
     const value = formData.get(key);
+    if (!value) return null;
+
     if (value === 'loan-player') {
         const loanName = (formData.get(`${key}-loan`) || '').trim();
-        return loanName || 'Kiralık Oyuncu';
+        return {
+            name: loanName || 'Kiralık Oyuncu',
+            loan: true,
+            ownGoal: false
+        };
     }
+
     if (value === 'own-goal') {
-        return 'Kendi Kale';
+        return {
+            name: 'Kendi kalesine',
+            loan: false,
+            ownGoal: true
+        };
     }
-    return value;
+
+    return {
+        name: value,
+        loan: false,
+        ownGoal: false
+    };
+}
+
+function getRecordedGoalName(formData, key) {
+    const goalData = getRecordedGoalData(formData, key);
+    return goalData ? goalData.name : '';
 }
 
 function setupGoalControls(goalDiv, i) {
@@ -393,9 +423,7 @@ function setupGoalControls(goalDiv, i) {
             ownGoalCheckbox.disabled = true;
         } else {
             ownGoalCheckbox.disabled = false;
-            if (!ownGoalCheckbox.checked) {
-                ownGoalCheckbox.checked = false;
-            }
+            ownGoalCheckbox.checked = false;
         }
     };
 
@@ -476,7 +504,7 @@ function updateGoalDetails() {
                         <option value="">Seç</option>
                         ${makePlayerOptions(scorers)}
                         <option value="loan-player">Kiralık</option>
-                        <option value="own-goal">Kendi Kale</option>
+                        <option value="own-goal">Kendi kalesine</option>
                     </select>
                     <input type="text" name="scorer-${i}-loan" placeholder="Kiralık oyuncu adı" style="display: none; margin-top: .5rem;">
                     <label>
@@ -534,8 +562,8 @@ async function renderGoalDetailsForMatch(panelId, containerId, homeTeam, awayTea
         const showMinute = typeof existingGoal.minute === 'number';
         const scorerValues = players.map(p => typeof p === 'string' ? p : p.name);
         const assisterValues = players.map(p => typeof p === 'string' ? p : p.name);
-        const isScorerLoan = existingGoal.scorer && existingGoal.scorer !== 'Kendi Kale' && !scorerValues.includes(existingGoal.scorer);
-        const isOwnGoal = existingGoal.scorer === 'Kendi Kale';
+        const isScorerLoan = existingGoal.scorer && existingGoal.scorer !== 'Kendi kalesine' && existingGoal.scorer !== 'Kendi Kale' && !scorerValues.includes(existingGoal.scorer);
+        const isOwnGoal = existingGoal.ownGoal || existingGoal.scorer === 'Kendi kalesine' || existingGoal.scorer === 'Kendi Kale';
         const isAssisterLoan = existingGoal.assister && !assisterValues.includes(existingGoal.assister);
 
         const goalDiv = document.createElement('div');
@@ -551,7 +579,7 @@ async function renderGoalDetailsForMatch(panelId, containerId, homeTeam, awayTea
                     return `<option value="${value}" ${selected}>${value}</option>`;
                 }).join('')}
                 <option value="loan-player" ${isScorerLoan ? 'selected' : ''}>Kiralık</option>
-                <option value="own-goal" ${isOwnGoal ? 'selected' : ''}>Kendi Kale</option>
+                <option value="own-goal" ${isOwnGoal ? 'selected' : ''}>Kendi kalesine</option>
             </select>
             <input type="text" name="scorer-${i}-loan" placeholder="Kiralık oyuncu adı" style="display: ${isScorerLoan ? 'block' : 'none'}; margin-top: .5rem;" value="${isScorerLoan ? existingGoal.scorer : ''}">
             <label>
@@ -727,15 +755,23 @@ document.getElementById('result-form').onsubmit = async (e) => {
     const score1 = parseInt(formData.get('score1')) || 0;
     
     for (let i = 0; i < totalGoals; i++) {
-        const scorer = getRecordedGoalName(formData, `scorer-${i}`);
-        const assister = getRecordedGoalName(formData, `assister-${i}`) || null;
+        const scorerData = getRecordedGoalData(formData, `scorer-${i}`);
+        const assisterData = getRecordedGoalData(formData, `assister-${i}`);
         const hasMinute = formData.get(`has-minute-${i}`) === 'on';
         const minute = hasMinute ? parseInt(formData.get(`minute-${i}`)) : null;
         const isHomeGoal = i < score1;
         const team = isHomeGoal ? 'home' : 'away';
 
-        if (scorer) {
-            goals.push({ team, scorer, assister, minute });
+        if (scorerData && scorerData.name) {
+            goals.push({
+                team,
+                scorer: scorerData.name,
+                scorerLoan: scorerData.loan,
+                ownGoal: scorerData.ownGoal,
+                assister: assisterData ? assisterData.name : null,
+                assisterLoan: assisterData ? assisterData.loan : false,
+                minute
+            });
         }
     }
 

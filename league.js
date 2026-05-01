@@ -96,11 +96,13 @@ function createMatchCard(match, teams) {
     // Create goal HTML for home team
     let homeGoalHtml = '';
     homeGoals.forEach(goal => {
-        const assisterHtml = goal.assister ? `<p class="assister-info">${goal.assister}</p>` : '';
+        const scorerText = `${goal.scorer}${goal.scorerLoan ? ' (Kiralık)' : ''}`;
+        const assisterText = goal.assister ? `${goal.assister}${goal.assisterLoan ? ' (Kiralık)' : ''}` : '';
+        const assisterHtml = assisterText ? `<p class="assister-info">${assisterText}</p>` : '';
         const minuteText = goal.minute ? ` ${goal.minute}'` : '';
         homeGoalHtml += `
             <div class="goal-info">
-                <p class="scorer-info">${goal.scorer}${minuteText}</p>
+                <p class="scorer-info">${scorerText}${minuteText}</p>
                 ${assisterHtml}
             </div>
         `;
@@ -109,11 +111,13 @@ function createMatchCard(match, teams) {
     // Create goal HTML for away team
     let awayGoalHtml = '';
     awayGoals.forEach(goal => {
-        const assisterHtml = goal.assister ? `<p class="assister-info">${goal.assister}</p>` : '';
+        const scorerText = `${goal.scorer}${goal.scorerLoan ? ' (Kiralık)' : ''}`;
+        const assisterText = goal.assister ? `${goal.assister}${goal.assisterLoan ? ' (Kiralık)' : ''}` : '';
+        const assisterHtml = assisterText ? `<p class="assister-info">${assisterText}</p>` : '';
         const minuteText = goal.minute ? ` ${goal.minute}'` : '';
         awayGoalHtml += `
             <div class="goal-info">
-                <p class="scorer-info">${goal.scorer}${minuteText}</p>
+                <p class="scorer-info">${scorerText}${minuteText}</p>
                 ${assisterHtml}
             </div>
         `;

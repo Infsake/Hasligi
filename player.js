@@ -121,11 +121,13 @@ async function loadPlayerDetails() {
         match.goals.forEach(goal => {
             if (goal.scorer === playerName) {
                 const minuteText = goal.minute ? ` ${goal.minute}'` : '';
-                contributionRows.push(`<div class="player-action">Gol${minuteText}</div>`);
+                const loanText = goal.scorerLoan || (goal.scorer && goal.scorer.includes('Kiralık')) ? ' (Kiralık)' : '';
+                contributionRows.push(`<div class="player-action">Gol${loanText}${minuteText}</div>`);
             }
             if (goal.assister === playerName) {
                 const minuteText = goal.minute ? ` ${goal.minute}'` : '';
-                contributionRows.push(`<div class="player-action">Asist${minuteText}</div>`);
+                const loanText = goal.assisterLoan || (goal.assister && goal.assister.includes('Kiralık')) ? ' (Kiralık)' : '';
+                contributionRows.push(`<div class="player-action">Asist${loanText}${minuteText}</div>`);
             }
         });
 
