@@ -248,8 +248,8 @@ document.getElementById('edit-match-form').onsubmit = async (e) => {
         const totalGoals = parsedScore1 + parsedScore2;
 
         for (let i = 0; i < totalGoals; i++) {
-            const scorer = form[`scorer-${i}`]?.value;
-            const assister = form[`assister-${i}`]?.value || null;
+            const scorer = getRecordedGoalName(new FormData(form), `scorer-${i}`);
+            const assister = getRecordedGoalName(new FormData(form), `assister-${i}`) || null;
             const hasMinute = form[`has-minute-${i}`]?.checked;
             const minute = hasMinute ? parseInt(form[`minute-${i}`]?.value, 10) : null;
             const isHomeGoal = i < parsedScore1;
@@ -364,6 +364,85 @@ document.getElementById('edit-player-form').onsubmit = async (e) => {
     }
 };
 
+function getRecordedGoalName(formData, key) {
+    const value = formData.get(key);
+    if (value === 'loan-player') {
+        const loanName = (formData.get(`${key}-loan`) || '').trim();
+        return loanName || 'Kiralık Oyuncu';
+    }
+    if (value === 'own-goal') {
+        return 'Kendi Kale';
+    }
+    return value;
+}
+
+function setupGoalControls(goalDiv, i) {
+    const scorerSelect = goalDiv.querySelector(`select[name="scorer-${i}"]`);
+    const scorerLoanInput = goalDiv.querySelector(`input[name="scorer-${i}-loan"]`);
+    const assisterSelect = goalDiv.querySelector(`select[name="assister-${i}"]`);
+    const assisterLoanInput = goalDiv.querySelector(`input[name="assister-${i}-loan"]`);
+    const ownGoalCheckbox = goalDiv.querySelector(`input[name="own-goal-${i}"]`);
+
+    const updateScorerLoan = () => {
+        const isLoan = scorerSelect.value === 'loan-player';
+        scorerLoanInput.style.display = isLoan ? 'block' : 'none';
+        scorerLoanInput.required = isLoan;
+
+        if (scorerSelect.value === 'own-goal') {
+            ownGoalCheckbox.checked = true;
+            ownGoalCheckbox.disabled = true;
+        } else {
+            ownGoalCheckbox.disabled = false;
+            if (!ownGoalCheckbox.checked) {
+                ownGoalCheckbox.checked = false;
+            }
+        }
+    };
+
+    scorerSelect.addEventListener('change', () => {
+        if (scorerSelect.value === 'own-goal') {
+            ownGoalCheckbox.checked = true;
+            ownGoalCheckbox.disabled = true;
+        } else {
+            ownGoalCheckbox.disabled = false;
+            if (ownGoalCheckbox.checked) {
+                ownGoalCheckbox.checked = false;
+            }
+        }
+        updateScorerLoan();
+    });
+
+    ownGoalCheckbox.addEventListener('change', () => {
+        if (ownGoalCheckbox.checked) {
+            scorerSelect.value = 'own-goal';
+            scorerLoanInput.style.display = 'none';
+            scorerLoanInput.required = false;
+            ownGoalCheckbox.disabled = true;
+        } else if (scorerSelect.value === 'own-goal') {
+            scorerSelect.value = '';
+        }
+    });
+
+    assisterSelect.addEventListener('change', () => {
+        const isLoan = assisterSelect.value === 'loan-player';
+        assisterLoanInput.style.display = isLoan ? 'block' : 'none';
+        assisterLoanInput.required = isLoan;
+    });
+
+    updateScorerLoan();
+    if (assisterSelect.value === 'loan-player') {
+        assisterLoanInput.style.display = 'block';
+        assisterLoanInput.required = true;
+    }
+}
+
+function makePlayerOptions(players) {
+    return players.map(p => {
+        const name = typeof p === 'string' ? p : p.name;
+        return `<option value="${name}">${name}</option>`;
+    }).join('');
+}
+
 function updateGoalDetails() {
     const score1 = parseInt(document.getElementById('score1').value) || 0;
     const score2 = parseInt(document.getElementById('score2').value) || 0;
@@ -380,7 +459,6 @@ function updateGoalDetails() {
         const homeTeam = selectedOption.dataset.home;
         const awayTeam = selectedOption.dataset.away;
 
-        // Get players for both teams
         fetchJson('/api/teams', '/teams.json').then(teams => {
             const homePlayers = teams.find(t => t.name === homeTeam)?.players || [];
             const awayPlayers = teams.find(t => t.name === awayTeam)?.players || [];
@@ -388,21 +466,29 @@ function updateGoalDetails() {
             for (let i = 0; i < totalGoals; i++) {
                 const isHomeGoal = i < score1;
                 const teamName = isHomeGoal ? homeTeam : awayTeam;
+                const scorers = isHomeGoal ? homePlayers : awayPlayers;
                 const goalDiv = document.createElement('div');
                 goalDiv.className = 'goal-item';
-                const scorerPlayers = isHomeGoal ? homePlayers : awayPlayers;
                 goalDiv.innerHTML = `
                     <h4>${teamName} Takımının ${isHomeGoal ? (i + 1) : (i - score1 + 1)}. Golü</h4>
                     <label>Golü Atan Oyuncu</label>
                     <select name="scorer-${i}" required>
                         <option value="">Seç</option>
-                        ${scorerPlayers.map(p => `<option value="${typeof p === 'string' ? p : p.name}">${typeof p === 'string' ? p : p.name}</option>`).join('')}
+                        ${makePlayerOptions(scorers)}
+                        <option value="loan-player">Kiralık</option>
+                        <option value="own-goal">Kendi Kale</option>
                     </select>
+                    <input type="text" name="scorer-${i}-loan" placeholder="Kiralık oyuncu adı" style="display: none; margin-top: .5rem;">
+                    <label>
+                        <input type="checkbox" name="own-goal-${i}"> Kendi kalesine gol
+                    </label>
                     <label>Asist Yapan Oyuncu</label>
                     <select name="assister-${i}">
                         <option value="">Yok</option>
-                        ${scorerPlayers.map(p => `<option value="${typeof p === 'string' ? p : p.name}">${typeof p === 'string' ? p : p.name}</option>`).join('')}
+                        ${makePlayerOptions(scorers)}
+                        <option value="loan-player">Kiralık</option>
                     </select>
+                    <input type="text" name="assister-${i}-loan" placeholder="Kiralık asistçi adı" style="display: none; margin-top: .5rem;">
                     <label>
                         <input type="checkbox" name="has-minute-${i}"> Dakikası var mı?
                     </label>
@@ -414,6 +500,7 @@ function updateGoalDetails() {
                     minuteInput.style.display = checkbox.checked ? 'block' : 'none';
                     minuteInput.required = checkbox.checked;
                 });
+                setupGoalControls(goalDiv, i);
                 container.appendChild(goalDiv);
             }
         });
@@ -445,6 +532,11 @@ async function renderGoalDetailsForMatch(panelId, containerId, homeTeam, awayTea
         const existingGoal = existingGoals[i] || {};
         const minuteValue = existingGoal.minute || '';
         const showMinute = typeof existingGoal.minute === 'number';
+        const scorerValues = players.map(p => typeof p === 'string' ? p : p.name);
+        const assisterValues = players.map(p => typeof p === 'string' ? p : p.name);
+        const isScorerLoan = existingGoal.scorer && existingGoal.scorer !== 'Kendi Kale' && !scorerValues.includes(existingGoal.scorer);
+        const isOwnGoal = existingGoal.scorer === 'Kendi Kale';
+        const isAssisterLoan = existingGoal.assister && !assisterValues.includes(existingGoal.assister);
 
         const goalDiv = document.createElement('div');
         goalDiv.className = 'goal-item';
@@ -455,19 +547,27 @@ async function renderGoalDetailsForMatch(panelId, containerId, homeTeam, awayTea
                 <option value="">Seç</option>
                 ${players.map(p => {
                     const value = typeof p === 'string' ? p : p.name;
-                    const selected = existingGoal.scorer === value ? 'selected' : '';
+                    const selected = !isScorerLoan && existingGoal.scorer === value ? 'selected' : '';
                     return `<option value="${value}" ${selected}>${value}</option>`;
                 }).join('')}
+                <option value="loan-player" ${isScorerLoan ? 'selected' : ''}>Kiralık</option>
+                <option value="own-goal" ${isOwnGoal ? 'selected' : ''}>Kendi Kale</option>
             </select>
+            <input type="text" name="scorer-${i}-loan" placeholder="Kiralık oyuncu adı" style="display: ${isScorerLoan ? 'block' : 'none'}; margin-top: .5rem;" value="${isScorerLoan ? existingGoal.scorer : ''}">
+            <label>
+                <input type="checkbox" name="own-goal-${i}" ${isOwnGoal ? 'checked' : ''}> Kendi kalesine gol
+            </label>
             <label>Asist Yapan Oyuncu</label>
             <select name="assister-${i}">
                 <option value="">Yok</option>
                 ${players.map(p => {
                     const value = typeof p === 'string' ? p : p.name;
-                    const selected = existingGoal.assister === value ? 'selected' : '';
+                    const selected = !isAssisterLoan && existingGoal.assister === value ? 'selected' : '';
                     return `<option value="${value}" ${selected}>${value}</option>`;
                 }).join('')}
+                <option value="loan-player" ${isAssisterLoan ? 'selected' : ''}>Kiralık</option>
             </select>
+            <input type="text" name="assister-${i}-loan" placeholder="Kiralık asistçi adı" style="display: ${isAssisterLoan ? 'block' : 'none'}; margin-top: .5rem;" value="${isAssisterLoan ? existingGoal.assister : ''}">
             <label>
                 <input type="checkbox" name="has-minute-${i}" ${showMinute ? 'checked' : ''}> Dakikası var mı?
             </label>
@@ -480,7 +580,7 @@ async function renderGoalDetailsForMatch(panelId, containerId, homeTeam, awayTea
             minuteInput.style.display = checkbox.checked ? 'block' : 'none';
             minuteInput.required = checkbox.checked;
         });
-
+        setupGoalControls(goalDiv, i);
         container.appendChild(goalDiv);
     }
 }
@@ -627,13 +727,13 @@ document.getElementById('result-form').onsubmit = async (e) => {
     const score1 = parseInt(formData.get('score1')) || 0;
     
     for (let i = 0; i < totalGoals; i++) {
-        const scorer = formData.get(`scorer-${i}`);
-        const assister = formData.get(`assister-${i}`) || null;
+        const scorer = getRecordedGoalName(formData, `scorer-${i}`);
+        const assister = getRecordedGoalName(formData, `assister-${i}`) || null;
         const hasMinute = formData.get(`has-minute-${i}`) === 'on';
         const minute = hasMinute ? parseInt(formData.get(`minute-${i}`)) : null;
         const isHomeGoal = i < score1;
         const team = isHomeGoal ? 'home' : 'away';
-        
+
         if (scorer) {
             goals.push({ team, scorer, assister, minute });
         }
